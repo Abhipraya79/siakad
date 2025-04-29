@@ -1,73 +1,50 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\MahasiswaController;
-use App\Http\Controllers\DosenController;
-use App\Http\Controllers\FRSController;
-use App\Http\Controllers\NilaiController;
-use App\Http\Controllers\JadwalKuliahController;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
+namespace App\Http\Controllers\Auth;
 
-/*
-|----------------------------------------------------------------------
-| Web Routes
-|----------------------------------------------------------------------
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\LoginRequest;
+use App\Providers\RouteServiceProvider;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
-// Route untuk guest (belum login)
-Route::middleware(['guest'])->group(function () {
-    Route::get('/', function () {
-        return view('welcome');
-    });
+class AuthController extends Controller
+{
+    public function showLoginForm(): View
+    {
+        return view('auth.login');
+    }
 
-    Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
-    Route::post('/login', [AuthenticatedSessionController::class, 'store']);
-});
+    public function login(LoginRequest $request): RedirectResponse
+    {
+        $request->authenticate();
 
-// Route untuk semua user yang sudah login
-Route::middleware(['auth'])->group(function () {
-    // Logout route
-    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+        /** @var \Illuminate\Http\Request $request */
+        $request->session()->regenerate();
 
-    // Route untuk mahasiswa
-    Route::middleware(['role:mahasiswa'])->prefix('mahasiswa')->name('mahasiswa.')->group(function () {
-        Route::get('/dashboard', [MahasiswaController::class, 'dashboard'])->name('dashboard');
-        
-        // FRS Routes
-        Route::get('/frs', [FRSController::class, 'index'])->name('frs.index');
-        Route::get('/frs/create', [FRSController::class, 'create'])->name('frs.create');
-        Route::post('/frs', [FRSController::class, 'store'])->name('frs.store');
-        Route::get('/frs/{id}', [FRSController::class, 'show'])->name('frs.show');
+        $user = Auth::user();
 
-        // Jadwal Routes
-        Route::get('/jadwal', [JadwalKuliahController::class, 'jadwalMahasiswa'])->name('jadwal.index');
-        
-        // Nilai Routes
-        Route::get('/nilai', [NilaiController::class, 'nilaiMahasiswa'])->name('nilai.index');
-    });
+        if ($user->hasRole('dosen')) {
+            return redirect()->intended(RouteServiceProvider::DOSEN_HOME);
+        }
 
-    // Route untuk dosen
-    Route::middleware(['role:dosen'])->prefix('dosen')->name('dosen.')->group(function () {
-        Route::get('/dashboard', [DosenController::class, 'dashboard'])->name('dashboard');
-        
-        // FRS Approval Routes
-        Route::get('/frs', [FRSController::class, 'approvalIndex'])->name('frs.index');
-        Route::post('/frs/{id}/approve', [FRSController::class, 'approve'])->name('frs.approve');
-        Route::post('/frs/{id}/reject', [FRSController::class, 'reject'])->name('frs.reject');
-        
-        // Nilai Routes
-        Route::get('/nilai', [NilaiController::class, 'index'])->name('nilai.index');
-        Route::get('/nilai/create/{id}', [NilaiController::class, 'create'])->name('nilai.create');
-        Route::post('/nilai/{id}', [NilaiController::class, 'store'])->name('nilai.store');
-        Route::get('/nilai/{id}/edit', [NilaiController::class, 'edit'])->name('nilai.edit');
-        Route::put('/nilai/{id}', [NilaiController::class, 'update'])->name('nilai.update');
-        
-        // Jadwal Mengajar
-        Route::get('/jadwal', [JadwalKuliahController::class, 'jadwalDosen'])->name('jadwal.index');
-    });
-});
+        if ($user->hasRole('mahasiswa')) {
+            return redirect()->intended(RouteServiceProvider::MAHASISWA_HOME);
+        }
+
+        return redirect()->intended(RouteServiceProvider::HOME);
+    }
+
+    public function logout(Request $request): RedirectResponse
+    {
+        Auth::guard('web')->logout();
+
+        /** @var \Illuminate\Http\Request $request */
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/');
+    }
+}
