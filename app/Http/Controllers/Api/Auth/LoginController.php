@@ -1,55 +1,50 @@
 <?php
 
-namespace App\Http\Controllers\Api\Auth;
+namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
-    public function login(Request $request)
+    // Tampilkan form login per role
+    public function show(string $role)
     {
-        $request->validate([
+        if (!in_array($role, ['mahasiswa','dosen'])) {
+            abort(404);
+        }
+        return view('auth.login', compact('role'));
+    }
+
+    // Proses autentikasi
+    public function authenticate(Request $request)
+    {
+        $role = $request->input('role');
+        $guard = $role; // nama guard = 'mahasiswa' atau 'dosen'
+
+        $credentials = $request->validate([
             'username' => 'required|string',
             'password' => 'required|string',
         ]);
 
-        $user = User::where('username', $request->username)->first();
-
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages([
-                'username' => ['The provided credentials are incorrect.'],
-            ]);
+        if (Auth::guard($guard)->attempt($credentials)) {
+            $request->session()->regenerate();
+            return redirect()->route("$role.dashboard");
         }
 
-        $token = $user->createToken('api_token')->plainTextToken;
-
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-            'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'username' => $user->username,
-                'role' => $user->role,
-            ],
-        ]);
+        return back()->withErrors([
+            'username' => 'Username atau password salah.',
+        ])->withInput(['username' => $credentials['username']]);
     }
 
+    // Logout kedua guard
     public function logout(Request $request)
     {
-        // Revoke the token that was used to authenticate the current request
-        $request->user()->tokens()->where('id', $request->user()->currentAccessToken()->id)->delete();
-        
-        // Alternative approach: delete all tokens of the current user
-        // $request->user()->tokens()->delete();
-
-        return response()->json([
-            'message' => 'Logout berhasil',
-        ]);
+        Auth::guard('mahasiswa')->logout();
+        Auth::guard('dosen')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/');
     }
 }

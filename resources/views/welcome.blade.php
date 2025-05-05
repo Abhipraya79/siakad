@@ -1,36 +1,34 @@
-@extends('layouts.mahasiswa') {{-- atau layout umum Anda --}}
+{{-- resources/views/welcome.blade.php --}}
+@extends('layouts.auth')
+
+@section('title', 'Welcome')
 
 @section('content')
-<div class="container py-5">
-  <div class="row justify-content-center">
-    <div class="col-md-8 text-center">
+<div class="max-w-lg w-full bg-white rounded-2xl shadow-xl overflow-hidden">
+  <div class="p-6 text-center">
+    
+    {{-- Judul --}}
+    <h2 class="text-2xl font-bold mb-1">Sistem Akademik</h2>
+    <p class="text-gray-500 mb-6">Pilih login sesuai peran Anda</p>
 
-      <h1 class="display-4 mb-3">Sistem Akademik</h1>
-      <p class="lead mb-4">Pilih login sesuai peran Anda untuk melanjutkan.</p>
+    {{-- Tombol Role --}}
+    <div class="space-y-4">
+      <a href="{{ route('login.role',['role'=>'dosen']) }}"
+         class="flex items-center justify-center gap-2 w-full py-3 rounded-lg border-2 border-indigo-600 text-indigo-600 font-medium hover:bg-indigo-50">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 12c2.485 0 4.5-2.015 4.5-4.5S14.485 3 12 3 7.5 5.015 7.5 7.5 9.515 12 12 12zm0 1.5c-3.033 0-9 1.517-9 4.5V21h18v-3c0-2.983-5.967-4.5-9-4.5z"/>
+        </svg>
+        Login Dosen
+      </a>
 
-      @auth
-        <div class="alert alert-info">
-          Anda sudah login sebagai <strong>{{ auth()->user()->role }}</strong>.
-        </div>
-        <form action="{{ route('logout') }}" method="POST" class="d-inline">
-          @csrf
-          <button type="submit" class="btn btn-danger">
-            <i class="bi bi-box-arrow-right"></i> Logout
-          </button>
-        </form>
-      @else
-        <div class="d-flex justify-content-center gap-3">
-          <a href="{{ route('login.role',['role'=>'mahasiswa']) }}"
-             class="btn btn-primary btn-lg">
-            <i class="bi bi-person-fill"></i> Login Mahasiswa
-          </a>
-          <a href="{{ route('login.role',['role'=>'dosen']) }}"
-             class="btn btn-success btn-lg">
-            <i class="bi bi-person-badge-fill"></i> Login Dosen
-          </a>
-        </div>
-      @endauth
-
+      <a href="{{ route('login.role',['role'=>'mahasiswa']) }}"
+        class="flex items-center justify-center gap-2 w-full py-3 rounded-lg border-2 border-yellow-600 text-yellow-600 font-medium hover:bg-yellow-50">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 12c2.485 0 4.5-2.015 4.5-4.5S14.485 3 12 3 7.5 5.015 7.5 7.5 9.515 12 12 12zm0 1.5c-3.033 0-9 1.517-9 4.5V21h18v-3c0-2.983-5.967-4.5-9-4.5z"/>
+        </svg>
+        Login Mahasiswa
+     </a>
+     
     </div>
   </div>
 </div>

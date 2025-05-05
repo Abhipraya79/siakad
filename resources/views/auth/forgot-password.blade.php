@@ -1,7 +1,9 @@
 <x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-        {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
-    </div>
+    <div class="mt-4 text-center text-sm text-gray-500">
+          Forgot your password? 
+          <a href="{{ url('forgot-password') }}" class="text-indigo-600 hover:underline">Reset Password</a>
+          </div>
+        
 
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />

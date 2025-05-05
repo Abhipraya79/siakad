@@ -4,25 +4,16 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>@yield('title', 'Login') – SIAKAD</title>
-
-  <!-- Bootstrap 5 CSS -->
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.4.3/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-    integrity="sha384-…"
-    crossorigin="anonymous"
-  >
+  @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-light d-flex align-items-center vh-100">
-  <div class="container">
+<body class="relative min-h-screen bg-cover bg-center"  
+      style="background-image: url('{{ asset('images/your-campus.jpg') }}')">
+  {{-- Overlay gelap --}}
+  <div class="absolute inset-0 bg-black opacity-50"></div>
+
+  {{-- Konten --}}
+  <div class="relative z-10 flex items-center justify-center min-h-screen px-4">
     @yield('content')
   </div>
-
-  <!-- Bootstrap 5 JS Bundle -->
-  <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.4.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-…"
-    crossorigin="anonymous"
-  ></script>
 </body>
 </html>

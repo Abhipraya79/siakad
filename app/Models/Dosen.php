@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class Dosen extends Model
+class Dosen extends Authenticatable
 {
-    use HasFactory;
+    use Notifiable;
 
+    protected $table = 'dosen';
     protected $primaryKey = 'id_dosen';
     public $incrementing = false;
     protected $keyType = 'string';
@@ -16,35 +17,38 @@ class Dosen extends Model
     protected $fillable = [
         'id_dosen',
         'nama',
-        'ndin',
+        'nidn',
         'bidang_studi',
         'prodi',
-        'is_dosen_wali',
+        'id_dosen_wali',
         'username',
-        'password'
+        'password',
     ];
 
     protected $hidden = [
         'password',
+        'remember_token',
     ];
 
-    public function user()
+    // Auto-hash password
+    public function setPasswordAttribute($value)
     {
-        return $this->hasOne(User::class, 'id_reference', 'id_dosen');
+        $this->attributes['password'] = bcrypt($value);
     }
 
-    public function mahasiswas()
+    /** Relasi: dosen memiliki banyak mahasiswa bimbingan */
+    public function mahasiswaBimbingan()
     {
         return $this->hasMany(Mahasiswa::class, 'id_dosen_wali', 'id_dosen');
     }
 
-    public function jadwalKuliah()
+    public function jadwal()
     {
         return $this->hasMany(JadwalKuliah::class, 'id_dosen', 'id_dosen');
     }
 
-    public function frsWali()
+    public function frsApprovals()
     {
-        return $this->hasMany(FRS::class, 'id_dosen_wali', 'id_dosen');
+        return $this->hasMany(FRS::class, 'approved_by', 'id_dosen');
     }
 }
