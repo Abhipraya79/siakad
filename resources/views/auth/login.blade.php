@@ -3,13 +3,13 @@
 @section('title', 'Login ' . ucfirst($role))
 
 @section('content')
-<div class="max-w-md w-full bg-white rounded-2xl shadow-xl overflow-hidden">
+<div class="max-w-md w-full bg-white rounded-2xl shadow-xl overflow-hidden mx-auto mt-10">
   <div class="p-8">
     {{-- Judul Dinamis --}}
     <h2 class="text-2xl font-bold text-center mb-2">Login {{ ucfirst($role) }}</h2>
     <p class="text-center text-gray-500 mb-6">Sign in to your account</p>
 
-    {{-- Errors --}}
+    {{-- Semua Errors --}}
     @if($errors->any())
       <div class="mb-4 text-sm text-red-600">
         <ul class="list-disc list-inside">
@@ -22,8 +22,9 @@
 
     <form action="{{ route('login.perform') }}" method="POST" class="space-y-4">
       @csrf
-      <input type="hidden" name="role" value="{{ $role }}">
+      <input type="hidden" name="role" value="{{ old('role', $role) }}">
 
+      {{-- Username --}}
       <div>
         <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
         <input
@@ -35,10 +36,14 @@
           placeholder="Enter your username"
           value="{{ old('username') }}"
           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm
-                 focus:ring-indigo-500 focus:border-indigo-500"
+                 focus:ring-indigo-500 focus:border-indigo-500 {{ $errors->has('username') ? 'border-red-500' : '' }}"
         />
+        @error('username')
+          <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+        @enderror
       </div>
 
+      {{-- Password --}}
       <div>
         <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
         <input
@@ -47,9 +52,11 @@
           type="password"
           required
           placeholder="Enter your password"
-          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm
-                 focus:ring-indigo-500 focus:border-indigo-500"
+            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 {{ $errors->has('password') ? 'border-red-500' : '' }}"
         />
+        @error('password')
+          <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+        @enderror
       </div>
 
       <button

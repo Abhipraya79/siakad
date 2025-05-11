@@ -5,7 +5,8 @@
 @section('content')
 <div class="mb-6">
     <h2 class="text-xl font-semibold">Dashboard Mahasiswa</h2>
-    <p class="text-gray-600">Selamat datang, {{ auth()->user()->mahasiswa->nama }}</p>
+    <p class="text-gray-600">Selamat datang, {{ auth()->user()->nama }}</p>
+
 </div>
 
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
