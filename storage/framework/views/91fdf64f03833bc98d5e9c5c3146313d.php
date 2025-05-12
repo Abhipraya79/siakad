@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'SIAKAD Mahasiswa')</title>
+    <title><?php echo $__env->yieldContent('title', 'SIAKAD Mahasiswa'); ?></title>
 
     <!-- Bootstrap CSS -->
     <link
@@ -18,7 +18,7 @@
         rel="stylesheet"
     >
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
 
     <style>
         .sidebar {
@@ -53,7 +53,7 @@
 </head>
 <body class="bg-light">
 
-    @include('partials.sidebar-mahasiswa')
+    <?php echo $__env->make('partials.sidebar-mahasiswa', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
     <div class="topbar d-flex justify-content-end align-items-center">
         <div class="input-group" style="max-width: 300px;">
@@ -64,7 +64,7 @@
     </div>
 
     <main class="content-body">
-        @yield('content')
+        <?php echo $__env->yieldContent('content'); ?>
     </main>
 
     <script
@@ -72,6 +72,7 @@
         integrity="sha384-whatever"
         crossorigin="anonymous"
     ></script>
-    @stack('scripts')
+    <?php echo $__env->yieldPushContent('scripts'); ?>
 </body>
 </html>
+<?php /**PATH C:\laragon\www\siakad\resources\views/layouts/mahasiswa.blade.php ENDPATH**/ ?>

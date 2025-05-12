@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log; // ← Tambahan log
+
 use App\Models\Mahasiswa;
 use App\Models\Dosen;
 
@@ -45,14 +47,33 @@ class LoginController extends Controller
             'password' => 'required|string',
         ]);
 
+        // Logging kredensial login (username saja, bukan password)
+        Log::info("Percobaan login:", [
+            'role' => $role,
+            'guard' => $guard,
+            'username' => $credentials['username'],
+        ]);
+
         // Cek apakah pengguna dengan kredensial yang diberikan ada
         if (Auth::guard($guard)->attempt($credentials)) {
             // Regenerasi session setelah berhasil login
             $request->session()->regenerate();
 
+            // Logging sukses
+            Log::info("Login berhasil:", [
+                'username' => $credentials['username'],
+                'guard' => $guard,
+            ]);
+
             // Redirect ke dashboard sesuai role (mahasiswa atau dosen)
             return redirect()->route("$role.dashboard");
         }
+
+        // Logging gagal
+        Log::warning("Login gagal:", [
+            'username' => $credentials['username'],
+            'guard' => $guard,
+        ]);
 
         // Jika login gagal, tampilkan pesan error
         return back()->withErrors([

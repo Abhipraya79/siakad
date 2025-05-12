@@ -31,10 +31,10 @@ class Dosen extends Authenticatable
     ];
 
     // Auto-hash password
-    public function setPasswordAttribute($value)
-    {
-        $this->attributes['password'] = bcrypt($value);
-    }
+   // public function setPasswordAttribute($value)
+    //{
+    //    $this->attributes['password'] = bcrypt($value);
+    //}
 
     /** Relasi: dosen memiliki banyak mahasiswa bimbingan */
     public function mahasiswaBimbingan()
