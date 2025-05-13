@@ -35,9 +35,4 @@ class JadwalKuliah extends Model
     {
         return $this->hasMany(Frs::class, 'id_jadwal_kuliah', 'id_jadwal');
     }
-    public function ruangan()
-{
-    return $this->belongsTo(Ruangan::class, 'ruangan', 'kode_ruangan');
-}
-
 }

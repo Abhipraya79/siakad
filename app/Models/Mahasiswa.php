@@ -11,9 +11,9 @@ class Mahasiswa extends Authenticatable
 
     protected $table = 'mahasiswa';
     protected $guard = 'mahasiswa';
-    protected $primaryKey = 'id_mahasiswa';   
-     public $incrementing = false;
+    protected $primaryKey = 'id_mahasiswa';    public $incrementing = false;
     protected $keyType = 'string';
+
     protected $fillable = [
         'id_mahasiswa',
         'nama',

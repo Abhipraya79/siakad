@@ -6,12 +6,6 @@
 *.md diff=markdown
 *.php diff=php
 
-# enforce LF for all text files
-* text=auto eol=lf
-
-# optional: paksa CRLF untuk script Windows
-*.bat text eol=crlf
-
 /.github export-ignore
 CHANGELOG.md export-ignore
 .styleci.yml export-ignore

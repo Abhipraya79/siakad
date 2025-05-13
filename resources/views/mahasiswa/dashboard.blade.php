@@ -3,81 +3,56 @@
 @section('title', 'Dashboard Mahasiswa')
 
 @section('content')
-<div class="container-fluid">
-    <h1 class="mb-4">Dashboard Mahasiswa</h1>
+<div class="mb-6">
+    <h2 class="text-xl font-semibold">Dashboard Mahasiswa</h2>
+    <p class="text-gray-600">Selamat datang, {{ auth()->user()->nama }}</p>
 
-    {{-- Info Boxes --}}
-{{-- Info Boxes --}}
-<div class="d-flex justify-content-between align-items-stretch mb-5 flex-wrap">
-  <!-- SKS -->
-  <div class="info-card custom-card-sks flex-fill me-3">
-    <div class="card-body d-flex justify-content-between align-items-center p-4">
-      <i class="bi bi-journal-bookmark-fill fs-1"></i>
-      <div class="text-end">
-        <div class="info-label">SKS Diambil</div>
-        <div class="info-value">{{ $totalSks }}</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Matakuliah -->
-  <div class="info-card custom-card-mk flex-fill mx-3">
-    <div class="card-body d-flex justify-content-between align-items-center p-4">
-      <i class="bi bi-bookmark-fill fs-1"></i>
-      <div class="text-end">
-        <div class="info-label">IPK</div>
-        <div class="info-value">{{ $ipk }}</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Users -->
-  <div class="info-card custom-card-users flex-fill ms-3">
-    <div class="card-body d-flex justify-content-between align-items-center p-4">
-      <i class="bi bi-person-circle fs-1"></i>
-      <div class="text-end">
-        <div class="info-label">Semester</div>
-        <div class="info-value">{{ $semesterAktif }}</div>
-      </div>
-    </div>
-  </div>
 </div>
 
-    {{-- Jadwal Hari Ini --}}
-    <div class="card mt-5">
-        <div class="card-header">
-            Jadwal Hari Ini —
-            {{ \Carbon\Carbon::now()->translatedFormat('l, d F Y') }}
-        </div>
-        <div class="card-body p-0">
-            @if($jadwalHariIni->isEmpty())
-                <div class="p-4">Tidak ada jadwal kuliah hari ini.</div>
-            @else
-                <table class="table mb-0">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Kode & Mata Kuliah</th>
-                            <th>Dosen</th>
-                            <th>Waktu</th>
-                            <th>Ruangan</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($jadwalHariIni as $jadwal)
-                        <tr>
-                            <td>
-                                <strong>{{ $jadwal->mataKuliah->kode_mata_kuliah ?? '-' }}</strong><br>
-                                {{ $jadwal->mataKuliah->nama_mata_kuliah ?? '-' }}
-                            </td>
-                            <td>{{ $jadwal->dosen->nama ?? '-' }}</td>
-                            <td>{{ $jadwal->jam_mulai }} - {{ $jadwal->jam_selesai }}</td>
-                            <td>{{ $jadwal->ruangan }}</td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            @endif
-        </div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+    <div class="bg-white p-4 rounded-lg shadow">
+        <h3 class="font-medium text-gray-500">Total SKS Semester Ini</h3>
+        <p class="text-2xl font-bold">{{ $totalSks }}</p>
+    </div>
+    <div class="bg-white p-4 rounded-lg shadow">
+        <h3 class="font-medium text-gray-500">IPK</h3>
+        <p class="text-2xl font-bold">{{ number_format($ipk, 2) }}</p>
+    </div>
+    <div class="bg-white p-4 rounded-lg shadow">
+        <h3 class="font-medium text-gray-500">Semester</h3>
+        <p class="text-2xl font-bold">{{ $semesterAktif }}</p>
+    </div>
+</div>
+
+<div class="bg-white rounded-lg shadow overflow-hidden mb-6">
+    <div class="p-4 border-b border-gray-200">
+        <h3 class="font-semibold">Jadwal Kuliah Hari Ini</h3>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Mata Kuliah</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Dosen</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Waktu</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ruang</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                @forelse($jadwalHariIni as $jadwal)
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $jadwal->mataKuliah->nama_mata_kuliah }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $jadwal->dosen->nama }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $jadwal->jam_mulai }} - {{ $jadwal->jam_selesai }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $jadwal->ruangan->nama_ruang }}</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-500">Tidak ada jadwal hari ini</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
     </div>
 </div>
 @endsection
