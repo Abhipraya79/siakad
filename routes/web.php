@@ -17,79 +17,50 @@ use App\Http\Controllers\JadwalKuliahController;
 // Halaman awal (Welcome)
 Route::get('/', fn() => view('welcome'))->name('welcome');
 
-// ---------------------------------------------------------------------
-// Route fallback untuk middleware Authenticate (route('login') must exist)
-// ---------------------------------------------------------------------
-Route::get('/login', fn() => redirect()->route('login.role', ['role' => 'mahasiswa']))
-     ->name('login');
-
-// Route login berdasarkan role (untuk welcome.blade.php & redirect above)
-Route::get('/login/{role}', [LoginController::class, 'show'])
-     ->name('login.role');
+// Route login default (wajib ada untuk auth middleware Laravel)
+Route::get('/login', fn() => redirect()->route('login.role', ['role' => 'mahasiswa']))->name('login');
 
 // Routes untuk guest (belum login)
 Route::middleware('guest')->group(function () {
     // Form login per role: /login/mahasiswa atau /login/dosen
-    Route::get('/login/{role}', [LoginController::class, 'show'])
-         ->name('login.role');
+    Route::get('/login/{role}', [LoginController::class, 'show'])->name('login.role');
 
     // Proses autentikasi
-    Route::post('/login', [LoginController::class, 'authenticate'])
-         ->name('login.perform');
+    Route::post('/login', [LoginController::class, 'authenticate'])->name('login.perform');
 });
 
-// Routes untuk semua user yang sudah login (logout)
+// Route untuk semua user yang sudah login (logout)
 Route::middleware('auth:mahasiswa,dosen')->group(function () {
-    Route::post('/logout', [LoginController::class, 'logout'])
-         ->name('logout');
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });
 
 // ===================== MAHASISWA ROUTES =====================
 Route::prefix('mahasiswa')
-     ->name('mahasiswa.')
-     ->middleware('auth:mahasiswa')
-     ->group(function () {
-        // Dashboard Mahasiswa
-        Route::get('/dashboard', [MahasiswaController::class, 'dashboard'])
-             ->name('dashboard');
-
-        // CRUD FRS
+    ->name('mahasiswa.')
+    ->middleware('auth:mahasiswa')
+    ->group(function () {
+        Route::get('/dashboard', [MahasiswaController::class, 'dashboard'])->name('dashboard');
         Route::get('/frs',         [FRSController::class, 'index'])->name('frs.index');
         Route::get('/frs/create',  [FRSController::class, 'create'])->name('frs.create');
         Route::post('/frs',        [FRSController::class, 'store'])->name('frs.store');
         Route::get('/frs/{id}',    [FRSController::class, 'show'])->name('frs.show');
-
-        // Lihat Jadwal
-        Route::get('/jadwal',      [JadwalKuliahController::class, 'jadwalMahasiswa'])
-             ->name('jadwal.index');
-
-        // Lihat Nilai
-        Route::get('/nilai',       [NilaiController::class, 'nilaiMahasiswa'])
-             ->name('nilai.index');
-});
+        Route::get('/jadwal',      [JadwalKuliahController::class, 'jadwalMahasiswa'])->name('jadwal.index');
+        Route::get('/nilai',       [NilaiController::class, 'nilaiMahasiswa'])->name('nilai.index');
+    });
 
 // ===================== DOSEN ROUTES =====================
 Route::prefix('dosen')
-     ->name('dosen.')
-     ->middleware('auth:dosen')
-     ->group(function () {
-        // Dashboard Dosen
-        Route::get('/dashboard', [DosenController::class, 'dashboard'])
-             ->name('dashboard');
-
-        // Approval FRS
-        Route::get('/frs',               [FRSController::class, 'approvalIndex'])->name('frs.index');
-        Route::post('/frs/{id}/approve', [FRSController::class, 'approve'])->name('frs.approve');
-        Route::post('/frs/{id}/reject',  [FRSController::class, 'reject'])->name('frs.reject');
-
-        // Input & Edit Nilai
+    ->name('dosen.')
+    ->middleware('auth:dosen')
+    ->group(function () {
+        Route::get('/dashboard', [DosenController::class, 'dashboard'])->name('dashboard');
+        Route::get('/frs',                  [FRSController::class, 'approvalIndex'])->name('frs.index');
+        Route::post('/frs/{id}/approve',    [FRSController::class, 'approve'])->name('frs.approve');
+        Route::post('/frs/{id}/reject',     [FRSController::class, 'reject'])->name('frs.reject');
         Route::get('/nilai',                [NilaiController::class, 'index'])->name('nilai.index');
         Route::get('/nilai/create/{id}',    [NilaiController::class, 'create'])->name('nilai.create');
         Route::post('/nilai/{id}',          [NilaiController::class, 'store'])->name('nilai.store');
         Route::get('/nilai/{id}/edit',      [NilaiController::class, 'edit'])->name('nilai.edit');
         Route::put('/nilai/{id}',           [NilaiController::class, 'update'])->name('nilai.update');
-
-        // Lihat Jadwal Mengajar
-        Route::get('/jadwal',               [JadwalKuliahController::class, 'jadwalDosen'])
-             ->name('jadwal.index');
-});
+        Route::get('/jadwal',               [JadwalKuliahController::class, 'jadwalDosen'])->name('jadwal.index');
+    });

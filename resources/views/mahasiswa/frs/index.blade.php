@@ -19,10 +19,10 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($frsList as $item)
+            @foreach($frs as $item)
             <tr>
-                <td class="border p-2">{{ optional(optional($item->jadwalKuliah)->mataKuliah)->nama_mata_kuliah ?? '-' }}</td>
-                <td class="border p-2">{{ optional(optional($item->jadwalKuliah)->mataKuliah)->sks ?? 0 }}</td>
+                <td class="border p-2">{{ $item->jadwalKuliah->mataKuliah->nama_mata_kuliah }}</td>
+                <td class="border p-2">{{ $item->jadwalKuliah->mataKuliah->sks }}</td>
                 <td class="border p-2">{{ $item->semester }}</td>
                 <td class="border p-2">{{ $item->status_acc }}</td>
             </tr>

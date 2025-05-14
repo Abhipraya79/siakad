@@ -49,6 +49,6 @@ class Dosen extends Authenticatable
 
     public function frsApprovals()
     {
-        return $this->hasMany(Frs::class, 'approved_by', 'id_dosen');
+        return $this->hasMany(FRS::class, 'approved_by', 'id_dosen');
     }
 }

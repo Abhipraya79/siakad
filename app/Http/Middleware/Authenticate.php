@@ -9,20 +9,21 @@ class Authenticate extends Middleware
 {
     protected function redirectTo(Request $request): ?string
 {
-    if (! $request->expectsJson()) {
-        // Ambil prefix URL seperti 'mahasiswa' atau 'dosen'
-        $prefix = $request->route()?->getPrefix();
+    if ($request->expectsJson()) {
+        return null;
+    }
 
-        // Jika prefix adalah 'mahasiswa' atau 'dosen', arahkan ke halaman login sesuai role
-        if (in_array($prefix, ['mahasiswa', 'dosen'])) {
-            return route('login.role', ['role' => $prefix]);
-        }
-
-        // Default fallback ke login mahasiswa
+    if ($request->is('mahasiswa') || $request->is('mahasiswa/*')) {
         return route('login.role', ['role' => 'mahasiswa']);
     }
 
-    return null;
-}
+    if ($request->is('dosen') || $request->is('dosen/*')) {
+        return route('login.role', ['role' => 'dosen']);
+    }
+
+    // fallback ke login default (mahasiswa)
+    return route('login.role', ['role' => 'mahasiswa']);
 }
 
+
+}

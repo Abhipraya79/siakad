@@ -11,18 +11,17 @@ class Mahasiswa extends Authenticatable
 
     protected $table = 'mahasiswa';
     protected $guard = 'mahasiswa';
-    protected $primaryKey = 'id_mahasiswa';    public $incrementing = false;
+    protected $primaryKey = 'id_mahasiswa';
+    public $incrementing = false;
     protected $keyType = 'string';
 
     protected $fillable = [
-        'id_mahasiswa',
         'nama',
         'nrp',
         'prodi',
         'tahun_masuk',
         'username',
-        'password',
-        'id_dosen_wali',
+        'password'
     ];
 
     protected $hidden = [
@@ -30,47 +29,40 @@ class Mahasiswa extends Authenticatable
         'remember_token',
     ];
 
-    // Penting: inform Laravel to use 'username' for login
-    public function getAuthIdentifierName()
-    {
-        return 'username';
-    }
-
-    public function getAuthPassword()
-    {
-        return $this->password;
-    }
-
     // Auto-hash password
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = bcrypt($value);
     }
 
+    /** Relasi: setiap mahasiswa punya satu user (jika pakai tabel users) */
     public function user()
     {
         return $this->hasOne(User::class, 'id_reference', 'id_mahasiswa');
     }
 
+    /** Relasi: mahasiswa memiliki dosen wali */
     public function dosenWali()
     {
         return $this->belongsTo(Dosen::class, 'id_dosen_wali', 'id_dosen');
     }
 
+    /** Relasi: mahasiswa membuat banyak FRS */
     public function frs()
     {
-        return $this->hasMany(Frs::class, 'id_mahasiswa');
+        return $this->hasMany(FRS::class, 'id_mahasiswa', 'id_mahasiswa');
     }
 
+    /** Relasi: mahasiswa memiliki nilai melalui FRS */
     public function nilai()
     {
         return $this->hasManyThrough(
             Nilai::class,
             FRS::class,
-            'id_mahasiswa',
-            'id_frs',
-            'id_mahasiswa',
-            'id_frs'
+            'id_mahasiswa', // FK di tabel frs
+            'id_frs',       // FK di tabel nilai
+            'id_mahasiswa', // PK di tabel mahasiswa
+            'id_frs'        // PK di tabel frs
         );
     }
 }

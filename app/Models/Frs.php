@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,7 +23,7 @@ class Frs extends Model
     ];
 
     protected $casts = [
-        'status_acc' => 'string',
+        'status_acc' => 'string', // pending, approved, rejected
         'semester' => 'integer'
     ];
 
@@ -43,19 +44,7 @@ class Frs extends Model
 
     public function nilai()
     {
-        return $this->hasOne(Nilai::class, 'id_frs', 'id_frs')->withDefault();
-    }
-
-    public function mataKuliah()
-    {
-        return $this->hasOneThrough(
-            MataKuliah::class,
-            JadwalKuliah::class,
-            'id_jadwal',          // foreign key di JadwalKuliah (mengacu ke FRS)
-            'id_mata_kuliah',     // foreign key di MataKuliah (mengacu ke JadwalKuliah)
-            'id_jadwal_kuliah',   // local key di FRS
-            'id_mata_kuliah'      // local key di JadwalKuliah
-        );
+        return $this->hasOne(Nilai::class, 'id_frs', 'id_frs');
     }
 
     public function scopePending($query)

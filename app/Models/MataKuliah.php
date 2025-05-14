@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,5 +23,17 @@ class MataKuliah extends Model
     public function jadwalKuliah()
     {
         return $this->hasMany(JadwalKuliah::class, 'id_mata_kuliah', 'id_mata_kuliah');
+    }
+
+    public function frs()
+    {
+        return $this->hasManyThrough(
+            FRS::class,
+            JadwalKuliah::class,
+            'id_mata_kuliah',
+            'id_jadwal_kuliah',
+            'id_mata_kuliah',
+            'id_jadwal_kuliah'
+        );
     }
 }

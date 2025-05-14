@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Nilai extends Model
 {
     use HasFactory;
-    protected $table = 'nilai';
+
     protected $primaryKey = 'id_nilai';
     public $incrementing = false;
     protected $keyType = 'string';
