@@ -16,7 +16,7 @@ class MahasiswaSeeder extends Seeder
     public function run()
     {
         Mahasiswa::create([
-            'id_mahasiswa' => 'MHS007',
+            'id_mahasiswa' => '',
             'nama' => 'Abhipraya12345',
             'nrp' => '3123500051',
             'prodi' => 'Teknik Informatika',
