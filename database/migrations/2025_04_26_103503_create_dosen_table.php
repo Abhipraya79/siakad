@@ -11,7 +11,7 @@ return new class extends Migration {
         Schema::create('dosen', function (Blueprint $table) {
             $table->string('id_dosen', 20)->primary();
             $table->string('nama', 100);
-            $table->string('nidn', 20)->unique(); // NIDN/NIK dosen
+            $table->string('nidn', 20)->unique(); 
             $table->string('bidang_studi', 50);
             $table->string('prodi', 50);
             $table->boolean('is_dosen_wali')->default(false);

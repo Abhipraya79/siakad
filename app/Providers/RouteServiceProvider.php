@@ -10,9 +10,9 @@ use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider
 {
-    public const HOME = '/home'; // Default redirect
-    public const DOSEN_HOME = '/dosen/dashboard'; // Tambahkan ini
-    public const MAHASISWA_HOME = '/mahasiswa/dashboard'; // Tambahkan ini
+    public const HOME = '/home'; 
+    public const DOSEN_HOME = '/dosen/dashboard'; 
+    public const MAHASISWA_HOME = '/mahasiswa/dashboard';
 
     public function boot(): void
     {

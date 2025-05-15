@@ -1,10 +1,23 @@
 <?php
 
 return [
+
+    /*
+    |----------------------------------------------------------------------
+    | Authentication Defaults
+    |----------------------------------------------------------------------
+    */
+
     'defaults' => [
         'guard' => 'web',
         'passwords' => 'users',
     ],
+
+    /*
+    |----------------------------------------------------------------------
+    | Authentication Guards
+    |----------------------------------------------------------------------
+    */
 
     'guards' => [
         'web' => [
@@ -14,7 +27,7 @@ return [
 
         'mahasiswa' => [
             'driver' => 'session',
-            'provider' => 'mahasiswa', // Sudah benar, tapi harus memastikan provider ini ada
+            'provider' => 'mahasiswa',
         ],
 
         'dosen' => [
@@ -23,13 +36,19 @@ return [
         ],
     ],
 
+    /*
+    |----------------------------------------------------------------------
+    | User Providers
+    |----------------------------------------------------------------------
+    */
+
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
 
-        'mahasiswa' => [ // Nama provider ini sudah sesuai dengan yang direferensikan di guard
+        'mahasiswa' => [
             'driver' => 'eloquent',
             'model' => App\Models\Mahasiswa::class,
         ],
