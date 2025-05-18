@@ -3,26 +3,67 @@
 @section('title', 'Dashboard Mahasiswa')
 
 @section('content')
+
+<!-- Ini section dashboard mahasiswa -->
 <div class="mb-6">
     <h2 class="text-xl font-semibold">Dashboard Mahasiswa</h2>
     <p class="text-gray-600">Selamat datang, {{ $mahasiswa->nama }}</p>
 </div>
 
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-    <div class="bg-white p-4 rounded-lg shadow">
-        <h3 class="font-medium text-gray-500">Total SKS Semester Ini</h3>
-        <p class="text-2xl font-bold">{{ $totalSks }}</p>
+<!-- Ini Widgets Card -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 px-4 py-6">
+    <!-- Widget Jumlah SKS -->
+    <div class="bg-white shadow-md rounded-lg p-4 flex items-center">
+        <div class="p-3 rounded-full bg-blue-100 text-blue-500 mr-6">
+            <svg class="widget-card" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M4 3a1 1 0 011-1h10a1 1 0 011 1v2H4V3zM3 6h14v10a1 1 0 01-1 1H4a1 1 0 01-1-1V6zm6 2v2H6V8h3zm0 3v2H6v-2h3zm5-3v2h-3V8h3zm0 3v2h-3v-2h3z" />
+            </svg>
+        </div>
+        <div>
+            <p class="text-gray-600 text-sm">Jumlah SKS Diambil</p>
+            <h3 class="text-xl font-semibold">{{ $totalSks ?? 0 }}</h3>
+        </div>
     </div>
+
+    <!-- Widget Jumlah Mata Kuliah -->
+    <div class="bg-white shadow-md rounded-lg p-4 flex items-center">
+        <div class="p-3 rounded-full bg-green-100 text-green-500 mr-6">
+            <svg class="widget-card" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2L2 7l10 5 10-5-10-5zm0 7.3L5 7l7 3.3 7-3.3-7 2.3zM4 10v2c0 2.8 4 5 8 5s8-2.2 8-5v-2l-8 4-8-4z" />
+            </svg>
+        </div>
+        <div>
+            <p class="text-gray-600 text-sm">Jumlah Mata Kuliah</p>
+            <h3 class="text-xl font-semibold">{{ $jumlahMatkul ?? 0 }}</h3>
+        </div>
+    </div>
+
+    <!-- Widget Jumlah User Aktif -->
+    <div class="bg-white shadow-md rounded-lg p-4 flex items-justify-between">
+        <div class="p-3 rounded-full bg-purple-100 text-purple-500 mr-6">
+            <svg class="widget-card" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 2a4 4 0 00-4 4v2a4 4 0 108 0V6a4 4 0 00-4-4zm-6 14a6 6 0 0112 0v1H4v-1z" />
+            </svg>
+        </div>
+        <div>
+            <p class="text-gray-600 text-sm">User Aktif</p>
+            <h3 class="text-xl font-semibold">{{ $jumlahUserAktif ?? 0 }}</h3>
+        </div>
+    </div>
+</div>
+<!-- Section 2 -->
+<div class="grid grid-cols-1 md:grid-cols-2 px-4 py-6">
     <div class="bg-white p-4 rounded-lg shadow">
         <h3 class="font-medium text-gray-500">IPK</h3>
-        <p class="text-2xl font-bold">{{ number_format($ipk, 2) }}</p>
+        <p class="text-2xl font-semibold">{{ number_format($ipk, 2) }}</p>
     </div>
     <div class="bg-white p-4 rounded-lg shadow">
         <h3 class="font-medium text-gray-500">Semester</h3>
-        <p class="text-2xl font-bold">{{ $semesterAktif }}</p>
+        <p class="text-2xl font-semibold">{{ $semesterAktif }}</p>
     </div>
 </div>
 
+<!-- Bottom Section -->
 <div class="bg-white rounded-lg shadow overflow-hidden mb-6">
     <div class="p-4 border-b border-gray-200">
         <h3 class="font-semibold">Jadwal Kuliah Hari Ini</h3>
