@@ -16,7 +16,7 @@ class MahasiswaController extends Controller
 
     public function create()
     {
-        $dosenWalis = Dosen::where('is_dosen_wali', true)->get();
+        $dosenWalis = Dosen::where('id_dosen_wali', true)->get();
         return view('mahasiswa.create', compact('dosenWalis'));
     }
 
@@ -47,7 +47,7 @@ class MahasiswaController extends Controller
 
     public function edit(Mahasiswa $mahasiswa)
     {
-        $dosenWalis = Dosen::where('is_dosen_wali', true)->get();
+        $dosenWalis = Dosen::where('id_dosen_wali', true)->get();
         return view('mahasiswa.edit', compact('mahasiswa', 'dosenWalis'));
     }
 

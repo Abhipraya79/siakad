@@ -9,8 +9,8 @@ return new class extends Migration {
     public function up()
     {
         Schema::create('nilai', function (Blueprint $table) {
-            $table->string('id_nilai', 20)->primary();
-            $table->string('id_frs', 20);
+            $table->id('id_nilai');
+            $table->unsignedBigInteger('id_frs');
             $table->integer('nilai_angka')->nullable();
             $table->string('nilai_huruf', 2)->nullable();
             $table->timestamps();

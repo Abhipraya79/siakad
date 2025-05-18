@@ -15,7 +15,6 @@ class Dosen extends Authenticatable
     protected $keyType = 'string';
 
     protected $fillable = [
-        'id_dosen',
         'nama',
         'nidn',
         'bidang_studi',
@@ -30,6 +29,10 @@ class Dosen extends Authenticatable
         'remember_token',
     ];
 
+        public function user()
+    {
+        return $this->hasOne(User::class, 'id_reference', 'id_dosen');
+    }
     // Auto-hash password
     public function setPasswordAttribute($value)
     {
@@ -37,9 +40,9 @@ class Dosen extends Authenticatable
     }
 
     /** Relasi: dosen memiliki banyak mahasiswa bimbingan */
-    public function mahasiswaBimbingan()
+    public function mahasiswaWali()
     {
-        return $this->hasMany(Mahasiswa::class, 'id_dosen_wali', 'id_dosen');
+        return $this->hasMany(Mahasiswa::class, 'id_dosen_wali');
     }
 
     public function jadwal()
@@ -49,6 +52,6 @@ class Dosen extends Authenticatable
 
     public function frsApprovals()
     {
-        return $this->hasMany(FRS::class, 'approved_by', 'id_dosen');
+        return $this->hasMany(FRS::class, 'id_dosen_wali', 'id_dosen');
     }
 }

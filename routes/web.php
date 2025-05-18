@@ -30,7 +30,7 @@ Route::middleware('guest')->group(function () {
 });
 
 // Route untuk semua user yang sudah login (logout)
-Route::middleware('auth:mahasiswa,dosen')->group(function () {
+Route::middleware(['web'])->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });
 

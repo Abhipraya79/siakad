@@ -18,6 +18,8 @@ class User extends Authenticatable implements MustVerifyEmailContract
      *
      * @var array<int, string>
      */
+
+    protected $table = 'user';
     protected $fillable = [
         'username',
         'password',
@@ -44,7 +46,7 @@ class User extends Authenticatable implements MustVerifyEmailContract
         'email_verified_at' => 'datetime',
         'password'          => 'hashed',
     ];
-
+    
     /**
      * Scope untuk query mahasiswa
      */
@@ -64,10 +66,10 @@ class User extends Authenticatable implements MustVerifyEmailContract
     /**
      * Relasi ke model Mahasiswa (jika role mahasiswa)
      */
-    public function mahasiswa()
-    {
-        return $this->hasOne(Mahasiswa::class, 'id_mahasiswa', 'id_reference');
-    }
+    public function mahasiswa() {
+    return $this->belongsTo(Mahasiswa::class, 'id_reference', 'id_mahasiswa');
+}
+
 
     /**
      * Relasi ke model Dosen (jika role dosen)
@@ -76,15 +78,6 @@ class User extends Authenticatable implements MustVerifyEmailContract
     {
         return $this->hasOne(Dosen::class, 'id_dosen', 'id_reference');
     }
-
-    /**
-     * Method untuk otentikasi dengan username
-     */
-    public function findForPassport($username)
-    {
-        return $this->where('username', $username)->first();
-    }
-
     /**
      * Get the name of the unique identifier for the user.
      */

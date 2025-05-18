@@ -9,10 +9,10 @@ return new class extends Migration {
     public function up()
     {
         Schema::create('frs', function (Blueprint $table) {
-            $table->string('id_frs', 20)->primary();
-            $table->string('id_mahasiswa', 20);
-            $table->string('id_jadwal_kuliah', 20);
-            $table->string('id_dosen_wali', 20);
+            $table->id('id_frs');
+            $table->unsignedBigInteger('id_mahasiswa');
+            $table->unsignedBigInteger('id_jadwal_kuliah');
+            $table->unsignedBigInteger('id_dosen_wali');
             $table->enum('status_acc', ['pending', 'approved', 'rejected'])->default('pending');
             $table->integer('semester');
             $table->timestamps();
@@ -28,8 +28,8 @@ return new class extends Migration {
                   ->onDelete('cascade');
 
             $table->foreign('id_dosen_wali')
-                  ->references('id_dosen')
-                  ->on('dosen')
+                  ->references('id_dosen_wali')
+                  ->on('dosen_wali')
                   ->onDelete('cascade');
         });
     }

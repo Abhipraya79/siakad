@@ -12,8 +12,7 @@ class Mahasiswa extends Authenticatable
     protected $table = 'mahasiswa';
     protected $guard = 'mahasiswa';
     protected $primaryKey = 'id_mahasiswa';
-    public $incrementing = false;
-    protected $keyType = 'string';
+    protected $keyType = 'int';
 
     protected $fillable = [
         'nama',
@@ -35,11 +34,10 @@ class Mahasiswa extends Authenticatable
         $this->attributes['password'] = bcrypt($value);
     }
 
-    /** Relasi: setiap mahasiswa punya satu user (jika pakai tabel users) */
     public function user()
-    {
-        return $this->hasOne(User::class, 'id_reference', 'id_mahasiswa');
-    }
+{
+    return $this->hasOne(User::class, 'id_reference', 'id_mahasiswa');
+}
 
     /** Relasi: mahasiswa memiliki dosen wali */
     public function dosenWali()
@@ -59,10 +57,10 @@ class Mahasiswa extends Authenticatable
         return $this->hasManyThrough(
             Nilai::class,
             FRS::class,
-            'id_mahasiswa', // FK di tabel frs
-            'id_frs',       // FK di tabel nilai
-            'id_mahasiswa', // PK di tabel mahasiswa
-            'id_frs'        // PK di tabel frs
+            'id_mahasiswa', 
+            'id_frs',       
+            'id_mahasiswa', 
+            'id_frs'  
         );
     }
 }

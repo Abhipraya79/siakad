@@ -9,12 +9,11 @@ return new class extends Migration {
     public function up()
     {
         Schema::create('dosen', function (Blueprint $table) {
-            $table->string('id_dosen', 20)->primary();
+            $table->id('id_dosen');
             $table->string('nama', 100);
             $table->string('nidn', 20)->unique(); 
             $table->string('bidang_studi', 50);
             $table->string('prodi', 50);
-            $table->boolean('is_dosen_wali')->default(false);
             $table->string('username', 50)->unique();
             $table->string('password');
             $table->rememberToken();

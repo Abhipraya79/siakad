@@ -12,6 +12,7 @@ class MataKuliah extends Model
     protected $primaryKey = 'id_mata_kuliah';
     public $incrementing = false;
     protected $keyType = 'string';
+    protected $table = 'mata_kuliah';
 
     protected $fillable = [
         'id_mata_kuliah',
