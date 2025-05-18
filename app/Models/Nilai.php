@@ -8,10 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Nilai extends Model
 {
     use HasFactory;
-
-    protected $primaryKey = 'id_nilai';
-    public $incrementing = false;
-    protected $keyType = 'string';
+    protected $table = 'nilai';
+    protected $primaryKey = 'id_nilai';    
+    protected $keyType = 'int';
 
     protected $fillable = [
         'id_nilai',

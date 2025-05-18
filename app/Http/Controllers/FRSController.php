@@ -13,13 +13,12 @@ class FRSController extends Controller
     public function index()
     {
         $mahasiswa = Auth::guard('mahasiswa')->user();
-        
+
         $frsList = $mahasiswa->frs()
         ->with('jadwalKuliah.mataKuliah')
         ->orderBy('created_at', 'desc')
         ->get();
         
-        // Perbaikan: Menggunakan view mahasiswa.frs.index daripada frs.index
         return view('mahasiswa.frs.index', compact('frsList'));
     }
 
@@ -38,7 +37,7 @@ class FRSController extends Controller
     public function store(Request $request)
 {
     $request->validate([
-        'id_jadwal_kuliah' => 'required|exists:jadwal_kuliahs,id_jadwal_kuliah',
+        'id_jadwal_kuliah' => 'required|exists:jadwal_kuliah,id_jadwal_kuliah',
         'semester' => 'required|numeric|min:1|max:14'
     ]);
 
@@ -52,7 +51,7 @@ class FRSController extends Controller
     }
 
     FRS::create([
-        'id_frs' => 'FRS'.time(),
+        'id_frs' => time(),
         'id_mahasiswa' => $mahasiswa->id_mahasiswa,
         'id_jadwal_kuliah' => $request->id_jadwal_kuliah,
         'id_dosen_wali' => $mahasiswa->dosenWali->id_dosen,
@@ -60,7 +59,7 @@ class FRSController extends Controller
         'status_acc' => 'pending'
     ]);
 
-    return redirect()->route('mahasiswa.frs.index')->with('success', 'FRS berhasil diajukan');
+    return redirect()->route('mahasiswa.frs.index')->with('success_create', 'FRS berhasil diajukan');
 }
 
 
@@ -114,7 +113,7 @@ class FRSController extends Controller
     }
 
     $id->delete();
-    return redirect()->route('mahasiswa.frs.index')->with('success', 'FRS berhasil dibatalkan');
+    return redirect()->route('mahasiswa.frs.index')->with('success_destroy', 'FRS berhasil dibatalkan');
 }
 
 }

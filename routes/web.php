@@ -43,7 +43,7 @@ Route::prefix('mahasiswa')
         Route::get('/frs',         [FRSController::class, 'index'])->name('frs.index');
         Route::get('/frs/create',  [FRSController::class, 'create'])->name('frs.create');
         Route::post('/frs',        [FRSController::class, 'store'])->name('frs.store');
-        Route::get('/frs/{id}',    [FRSController::class, 'show'])->name('frs.show');
+        Route::delete('/frs/{id}', [FRSController::class, 'destroy'])->name('frs.destroy'); 
         Route::get('/jadwal',      [JadwalKuliahController::class, 'jadwalMahasiswa'])->name('jadwal.index');
         Route::get('/nilai',       [NilaiController::class, 'nilaiMahasiswa'])->name('nilai.index');
     });

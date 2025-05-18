@@ -4,12 +4,17 @@
 
 @section('content')
 
-@if(session('success'))
+@if(session('success_create'))
     <div class="bg-green-200 text-green-800 p-2 mb-4 rounded">
-        {{ session('success') }}
+        {{ session('success_create') }}
     </div>
 @endif
 
+@if(session('success_destroy'))
+    <div class="bg-red-200 text-red-800 p-2 mb-4 rounded">
+        {{ session('success_destroy') }}
+    </div>
+@endif
 <a href="{{ route('mahasiswa.frs.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded mb-4 inline-block">
     Tambah FRS
 </a>
@@ -26,6 +31,7 @@
                 <th class="border border-gray-300 p-2">SKS</th>
                 <th class="border border-gray-300 p-2">Semester</th>
                 <th class="border border-gray-300 p-2">Status</th>
+                <th class="border border-gray-300 p-2">Aksi</th>
             </tr>
         </thead>
         <tbody>
@@ -36,9 +42,19 @@
                 <td class="border border-gray-300 p-2">{{ $frs->jadwalKuliah->mataKuliah->sks ?? '-' }}</td>
                 <td class="border border-gray-300 p-2">{{ $frs->semester }}</td>
                 <td class="border border-gray-300 p-2 capitalize">{{ $frs->status_acc }}</td>
+                <td class="border border-gray-300 p-2 text-center">
+                    <form action="{{ route('mahasiswa.frs.destroy', $frs->id_frs) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus FRS ini?');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">
+                            Hapus
+                        </button>
+                    </form>
+                </td>
             </tr>
             @endforeach
         </tbody>
     </table>
 @endif
+
 @endsection

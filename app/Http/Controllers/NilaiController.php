@@ -5,19 +5,29 @@ namespace App\Http\Controllers;
 use App\Models\Nilai;
 use App\Models\FRS;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 class NilaiController extends Controller
 {
     public function index()
     {
-        // Untuk mahasiswa
+        // Jika yang login adalah mahasiswa, hanya lihat nilai sendiri
         if (auth()->user()->role === 'mahasiswa') {
-            $nilaiList = auth()->user()->mahasiswa->nilai()->with('frs.jadwalKuliah.mataKuliah')->get();
-            return view('mahasiswa.nilai', compact('nilaiList'));
+            $nilaiList = auth()->user()->mahasiswa
+                ->nilai()
+                ->with('frs.jadwalKuliah.mataKuliah')
+                ->get();
+
+            return view('mahasiswa.nilai.index', compact('nilaiList'));
         }
+
         
-        // Untuk dosen
-        $frsList = auth()->user()->dosen->frsWali()->with(['mahasiswa', 'jadwalKuliah.mataKuliah'])->get();
+
+        // Jika dosen, tampilkan data FRS bimbingan
+        $frsList = auth()->user()->dosen
+            ->frsWali()
+            ->with(['mahasiswa', 'jadwalKuliah.mataKuliah'])
+            ->get();
+
         return view('dosen.nilai.index', compact('frsList'));
     }
 
@@ -44,7 +54,17 @@ class NilaiController extends Controller
 
         return redirect()->route('nilai.index')->with('success', 'Nilai berhasil disimpan');
     }
+    public function nilaiMahasiswa()
+{
+    $mahasiswa = Auth::guard('mahasiswa')->user();
 
+    // Ambil data nilai yang sudah dimiliki mahasiswa (dari relasi FRS dan jadwal kuliah)
+    $nilaiList = Nilai::whereHas('frs', function ($query) use ($mahasiswa) {
+        $query->where('id_mahasiswa', $mahasiswa->id_mahasiswa);
+    })->with(['frs.jadwalKuliah.mataKuliah'])->get();
+
+    return view('mahasiswa.nilai.index', compact('nilaiList'));
+}
     public function edit($id)
     {
         $nilai = Nilai::with('frs.jadwalKuliah.mataKuliah')->findOrFail($id);
