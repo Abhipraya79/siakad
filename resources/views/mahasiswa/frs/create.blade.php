@@ -3,14 +3,16 @@
 @section('title', 'Buat FRS')
 
 @section('content')
-<div>
-    <h1 class="text-2xl mb-4">Buat FRS Baru</h1>
+<div class="max-w-xl mx-auto p-6 bg-white shadow-lg rounded-lg animate-fade-in">
+    <h1 class="text-3xl font-bold text-blue-600 mb-6 text-center">Buat FRS Baru</h1>
     
     <form method="POST" action="{{ route('mahasiswa.frs.store') }}">
         @csrf
+
+        <!-- Pilih Jadwal -->
         <div class="mb-4">
-            <label>Jadwal Kuliah</label>
-            <select name="id_jadwal_kuliah" class="border p-2 w-full" id="jadwalSelect">
+            <label for="jadwalSelect" class="block text-gray-700 font-medium mb-2">Jadwal Kuliah</label>
+            <select name="id_jadwal_kuliah" id="jadwalSelect" class="border border-gray-300 rounded px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-400">
                 <option value="">-- Pilih Jadwal --</option>
                 @foreach($jadwalKuliah as $j)
                 <option 
@@ -23,22 +25,25 @@
             </select>
         </div>
 
+        <!-- Nama Mata Kuliah -->
         <div class="mb-4">
-            <label>Nama Mata Kuliah</label>
-            <input type="text" id="matkulInput" class="border p-2 w-full" readonly>
+            <label for="matkulInput" class="block text-gray-700 font-medium mb-2">Nama Mata Kuliah</label>
+            <input type="text" id="matkulInput" class="border border-gray-300 rounded px-4 py-2 w-full bg-gray-100 cursor-not-allowed" readonly>
         </div>
 
+        <!-- SKS -->
         <div class="mb-4">
-            <label>SKS</label>
-            <input type="text" id="sksInput" class="border p-2 w-full" readonly>
+            <label for="sksInput" class="block text-gray-700 font-medium mb-2">SKS</label>
+            <input type="text" id="sksInput" class="border border-gray-300 rounded px-4 py-2 w-full bg-gray-100 cursor-not-allowed" readonly>
         </div>
 
-        <div class="mb-4">
-            <label>Semester</label>
-            <input type="number" name="semester" class="border p-2 w-full" required>
+        <!-- Semester -->
+        <div class="mb-6">
+            <label for="semester" class="block text-gray-700 font-medium mb-2">Semester</label>
+            <input type="number" name="semester" id="semester" class="border border-gray-300 rounded px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-400" required>
         </div>
 
-        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">
+        <button type="submit" class="bg-blue-600 hover:bg-blue-700 transition-colors text-white font-semibold px-6 py-2 rounded w-full">
             Submit
         </button>
     </form>
