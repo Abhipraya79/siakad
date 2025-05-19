@@ -21,12 +21,9 @@ class NilaiController extends Controller
         }
 
         
-
+        $dosen = auth('dosen')->user();
         // Jika dosen, tampilkan data FRS bimbingan
-        $frsList = auth()->user()->dosen
-            ->frsWali()
-            ->with(['mahasiswa', 'jadwalKuliah.mataKuliah'])
-            ->get();
+        $frsList = $dosen->frsApprovals()->with(['mahasiswa', 'jadwalKuliah.mataKuliah'])->get();
 
         return view('dosen.nilai.index', compact('frsList'));
     }

@@ -75,9 +75,10 @@ class User extends Authenticatable implements MustVerifyEmailContract
      * Relasi ke model Dosen (jika role dosen)
      */
     public function dosen()
-    {
-        return $this->hasOne(Dosen::class, 'id_dosen', 'id_reference');
-    }
+{
+    return $this->belongsTo(Dosen::class, 'id_reference', 'id_dosen');
+}
+
     /**
      * Get the name of the unique identifier for the user.
      */
@@ -94,9 +95,6 @@ class User extends Authenticatable implements MustVerifyEmailContract
         return $this->role === 'mahasiswa';
     }
 
-    /**
-     * Cek apakah user adalah dosen
-     */
     public function isDosen()
     {
         return $this->role === 'dosen';

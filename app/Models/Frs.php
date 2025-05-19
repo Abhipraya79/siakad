@@ -11,7 +11,7 @@ class Frs extends Model
 
     protected $primaryKey = 'id_frs';
     public $incrementing = false;
-    protected $keyType = 'string';
+    protected $keyType = 'int';
 
     protected $fillable = [
         'id_frs',

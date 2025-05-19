@@ -10,8 +10,7 @@ class Ruangan extends Model
     use HasFactory;
 
     protected $primaryKey = 'id_ruang';
-    public $incrementing = false;
-    protected $keyType = 'string';
+    protected $keyType = 'int';
 
     protected $fillable = [
         'id_ruang',

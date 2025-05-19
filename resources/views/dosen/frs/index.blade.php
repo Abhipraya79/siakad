@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.dosen')
 
 @section('title', 'Persetujuan FRS')
 
@@ -15,7 +15,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($frs as $item)
+            @foreach($frsList as $item)
             <tr>
                 <td class="border p-2">{{ $item->mahasiswa->nama }}</td>
                 <td class="border p-2">{{ $item->jadwalKuliah->mataKuliah->nama_mata_kuliah }}</td>

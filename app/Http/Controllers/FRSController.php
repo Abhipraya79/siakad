@@ -66,26 +66,11 @@ class FRSController extends Controller
 // Duplicate destroy method removed to resolve duplicate symbol declaration error.
 
 
-    public function approvalIndex()
-    {
-        $user = Auth::user();
-        
-        if (!$user || !$user->dosen) {
-            return redirect()->back()->with('error', 'Anda tidak memiliki akses sebagai dosen');
-        }
-        
-        $frsList = $user->dosen->frsWali()->with(['mahasiswa', 'jadwalKuliah.mataKuliah'])->get();
-        // View ini sudah benar
-        return view('dosen.frs.index', compact('frsList'));
-    }
+
 
     public function approve($id)
     {
         $user = Auth::user();
-        
-        if (!$user || !$user->dosen) {
-            return redirect()->back()->with('error', 'Anda tidak memiliki akses sebagai dosen');
-        }
         
         $frs = FRS::findOrFail($id);
         $frs->update(['status_acc' => 'approved']);
@@ -115,5 +100,16 @@ class FRSController extends Controller
     $id->delete();
     return redirect()->route('mahasiswa.frs.index')->with('success_destroy', 'FRS berhasil dibatalkan');
 }
+public function approvalIndex()
+{
+    $dosen = auth('dosen')->user(); // ini sudah dosen langsung
+
+    $frsList = $dosen->frsApprovals()
+        ->with(['mahasiswa', 'jadwalKuliah.mataKuliah'])
+        ->get();
+
+    return view('dosen.frs.index', compact('frsList'));
+}
+
 
 }

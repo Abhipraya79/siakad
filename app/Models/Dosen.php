@@ -10,9 +10,9 @@ class Dosen extends Authenticatable
     use Notifiable;
 
     protected $table = 'dosen';
+    protected $guard = 'dosen';
     protected $primaryKey = 'id_dosen';
-    public $incrementing = false;
-    protected $keyType = 'string';
+    protected $keyType = 'int';
 
     protected $fillable = [
         'nama',
@@ -39,19 +39,20 @@ class Dosen extends Authenticatable
         $this->attributes['password'] = bcrypt($value);
     }
 
-    /** Relasi: dosen memiliki banyak mahasiswa bimbingan */
-    public function mahasiswaWali()
+    public function mahasiswa()
     {
         return $this->hasMany(Mahasiswa::class, 'id_dosen_wali');
     }
 
-    public function jadwal()
+    public function jadwalMataKuliah()
     {
         return $this->hasMany(JadwalKuliah::class, 'id_dosen', 'id_dosen');
     }
 
-    public function frsApprovals()
-    {
-        return $this->hasMany(FRS::class, 'id_dosen_wali', 'id_dosen');
-    }
+       public function frsApprovals()
+{
+    return $this->hasMany(Frs::class, 'id_dosen_wali', 'id_dosen');
 }
+
+}
+

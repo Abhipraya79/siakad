@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.dosen')
 
 @section('content')
     <h2>Jadwal Mengajar Saya</h2>
