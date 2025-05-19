@@ -1,13 +1,18 @@
 <aside class="fixed top-0 left-0 z-40 w-56 h-screen pt-14 transition-transform -translate-x-full bg-orange-60 border-r border-gray-200 md:translate-x-0">
     <div class="overflow-y-auto py-5 px-3 h-full bg-orange-60">
-        <ul class="space-y-2">
-            <div class="flex items-center space-x-3 px-3 mb-4">
-                <img src="{{ asset('images/icon_profile.png') }}" alt="Profile Image" class="w-12 h-12 rounded-full object-cover">
-                <div class="text-sm font-medium text-black-100">
-                    {{ Auth::user()->name }}
-                </div>
-            </div>
 
+        <h2 class="text-4xl font-bold text-center mb-6 text-blue-600 drop-shadow-md animate-fade-in">
+            Siakad MIS
+        </h2>
+
+        <!-- Bagian Profil -->
+        <div class="flex items-center space-x-3 px-3 mb-6">
+            <img src="{{ asset('images/ikon_profile.png') }}" alt="Profile Image" style="width: 100px; height: 100px;" class="rounded-full object-cover">
+            <div class="text-sm font-medium text-black-100">
+                {{ Auth::user()->name }}
+            </div>
+        </div>
+        <ul class="space-y-2">       
             <li>
                 <a href="{{ route('mahasiswa.dashboard') }}" 
                    class="nav-link">

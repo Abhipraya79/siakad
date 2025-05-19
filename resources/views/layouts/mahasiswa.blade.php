@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<body class="min-h-screen bg-gradient-to-br from-blue-400 via-white text-gray-800">
+
     <!-- ... meta tags ... -->
     <!-- Bootstrap CSS -->
     <link
