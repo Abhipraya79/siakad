@@ -21,7 +21,7 @@
     @endif
 
     <form action="{{ route('login.perform') }}" method="POST" class="space-y-4">
-      @csrf
+      @csrf 
       <input type="hidden" name="role" value="{{ $role }}">
 
       <div>

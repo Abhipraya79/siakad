@@ -32,7 +32,6 @@
         abort(403, 'Dosen tidak ditemukan untuk user ini.');
     }
 
-    // Ambil jadwal kuliah milik dosen tersebut
     $jadwalKuliah = JadwalKuliah::with(['mataKuliah', 'ruangan'])
         ->where('id_dosen', $dosen->id)
         ->get();

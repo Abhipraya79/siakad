@@ -57,10 +57,12 @@ Route::prefix('dosen')
         Route::get('/frs',                  [FRSController::class, 'approvalIndex'])->name('frs.index');
         Route::post('/frs/{id}/approve',    [FRSController::class, 'approve'])->name('frs.approve');
         Route::post('/frs/{id}/reject',     [FRSController::class, 'reject'])->name('frs.reject');
-        Route::get('/nilai',                [NilaiController::class, 'index'])->name('nilai.index');
-        Route::get('/nilai/create/{id}',    [NilaiController::class, 'create'])->name('nilai.create');
-        Route::post('/nilai/{id}',          [NilaiController::class, 'store'])->name('nilai.store');
-        Route::get('/nilai/{id}/edit',      [NilaiController::class, 'edit'])->name('nilai.edit');
-        Route::put('/nilai/{id}',           [NilaiController::class, 'update'])->name('nilai.update');
+        // Nilai - Dosen
+        Route::get('/nilai', [NilaiController::class, 'index'])->name('nilai.index');
+        Route::get('/nilai/create/{id_jadwal_kuliah}', [NilaiController::class, 'create'])->name('nilai.create');
+        Route::post('/nilai', [NilaiController::class, 'store'])->name('nilai.store');
+        Route::get('/nilai/{id_nilai}/edit', [NilaiController::class, 'edit'])->name('nilai.edit');
+        Route::put('/nilai/{id_nilai}', [NilaiController::class, 'update'])->name('nilai.update'); // ✅ Tambahkan ini
         Route::get('/jadwal',               [JadwalKuliahController::class, 'jadwalDosen'])->name('jadwal.index');
-    });
+    
+        });

@@ -5,7 +5,7 @@
     <h1 class="text-2xl font-bold mb-6">Nilai Saya</h1>
 
     <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
-        <thead class="bg-green-600 text-white">
+        <thead class="bg-yellow-400 text-white">
             <tr>
                 <th class="py-3 px-4 text-left">Kode Mata Kuliah</th>
                 <th class="py-3 px-4 text-left">Nama Mata Kuliah</th>
@@ -20,9 +20,9 @@
                     <td class="py-3 px-4">{{ $nilai->nilai_huruf }}</td>
                 </tr>
             @empty
-                <tr>
-                    <td colspan="3" class="py-3 px-4 text-center">Belum ada nilai.</td>
-                </tr>
+                <td class="py-3 px-4">
+                      {{ $nilai->nilai_huruf ?? '-' }}
+                </td>
             @endforelse
         </tbody>
     </table>
