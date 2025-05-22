@@ -1,7 +1,6 @@
 <aside class="fixed top-0 left-0 z-40 w-56 h-screen pt-14 transition-transform -translate-x-full border-r border-gray-200 md:translate-x-0 " style="background-color: #14487a;">
 <div class="overflow-y-auto py-5 px-3 h-full">
-        <h2 class="text-4xl font-bold text-center mb-6 drop-shadow-md animate-fade-in" style="color: #f3c903;">
-            Siakad MIS
+        <h2 class="text-4xl font-bold text-center mb-6 drop-shadow-md animate-fade-in" style="color: #f3c903;">   Siakad MIS
         </h2>
 
         <!-- Bagian Profil -->
@@ -63,6 +62,7 @@
         </a>
     </form>
 </li>
+
         </ul>
     </div>
 </aside>

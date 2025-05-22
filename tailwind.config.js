@@ -17,15 +17,13 @@ export default {
         },
     },
 
-  theme: {
-    extend: {
-      colors: {
-        mustard: '#f3c903',
-      },
+        theme: {
+        extend: {
+        colors: {
+            mustard: '#f3c903',
+        },
+        },
     },
-  },
-
-
 
     plugins: [forms],
 };
