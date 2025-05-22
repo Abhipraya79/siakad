@@ -8,6 +8,7 @@
 <div class="mb-6">
     <h2 class="text-xl font-semibold">Dashboard Mahasiswa</h2>
      <p class="text-black-600" > {{ $mahasiswa->nama }}</p>
+
 </div>
 
 <!-- Ini Widgets Card -->
@@ -15,7 +16,7 @@
     <!-- Widget Jumlah SKS -->
     <div class="bg-mustard shadow-md rounded-lg p-4 flex items-center">
         <div class="p-3 rounded-full bg-blue-100 text-blue-500 mr-6">
-            <svg class="widget-card w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                 <svg class="widget-card w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M4 3a1 1 0 011-1h10a1 1 0 011 1v2H4V3zM3 6h14v10a1 1 0 01-1 1H4a1 1 0 01-1-1V6zm6 2v2H6V8h3zm0 3v2H6v-2h3zm5-3v2h-3V8h3zm0 3v2h-3v-2h3z" />
                 </svg>
         </div>
@@ -64,14 +65,13 @@
 </div>
 
 <!-- Descriptive Text Section -->
-<div class="grid grid-cols-1 bg-white p-5 rounded-lg shadow mb-6">
-    <p class="text-gray-600">
+
+<div class="grid grid-cols-1 bg-white p-5 rounded-lg shadow mb-6">    <p class="text-gray-600">
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
     </p>
 </div>
 
 <!-- Bottom Section -->
-
 <div class="bg-white rounded-lg shadow overflow-hidden mb-6">
     <div class="p-4 border-b border-gray-200">
         <h3 class="font-semibold">Jadwal Kuliah Hari Ini</h3>
