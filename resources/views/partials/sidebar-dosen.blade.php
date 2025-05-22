@@ -44,7 +44,7 @@
                     </svg>
                     <span class="ml-3">Jadwal Mengajar</span>
                 </a>
-            </li>
+        </li>
             <li>
     <form method="POST" action="{{ route('logout') }}">
         @csrf
@@ -56,8 +56,8 @@
             </svg>
             <span class="ml-3">Logout</span>
         </a>
-    </form>
-</li>
+        </form>
+        </li>
         </ul>
     </div>
 </aside>
