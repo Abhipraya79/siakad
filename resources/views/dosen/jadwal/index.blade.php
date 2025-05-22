@@ -1,34 +1,41 @@
 @extends('layouts.dosen')
 
-@section('content')
-    <h2>Jadwal Mengajar Saya</h2>
+@section('title', 'Jadwal Mengajar')
 
-    <table border="1" cellpadding="10" cellspacing="0">
-        <thead>
-            <tr>
-                <th>No</th>
-                <th>Mata Kuliah</th>
-                <th>Hari</th>
-                <th>Jam</th>
-                <th>Ruangan</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{-- Contoh data statis, nanti bisa diganti dengan @foreach --}}
-            <tr>
-                <td>1</td>
-                <td>Pemrograman Web</td>
-                <td>Senin</td>
-                <td>08:00 - 10:00</td>
-                <td>Ruang 101</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>Basis Data</td>
-                <td>Rabu</td>
-                <td>10:00 - 12:00</td>
-                <td>Ruang 102</td>
-            </tr>
-        </tbody>
-    </table>
+@section('content')
+<div class="container mx-auto px-4 py-6">
+    <h1 class="text-2xl font-bold mb-6">Jadwal Mengajar Saya</h1>
+
+    @if($jadwalKuliah->isEmpty())
+        <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4">
+            <p>Belum ada jadwal mengajar yang terdaftar untuk Anda.</p>
+        </div>
+    @else
+        <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+            <thead class="bg-blue-600 text-white">
+                <tr>
+                    <th class="py-3 px-4 text-left">No</th>
+                    <th class="py-3 px-4 text-left">Mata Kuliah</th>
+                    <th class="py-3 px-4 text-left">Hari</th>
+                    <th class="py-3 px-4 text-left">Jam</th>
+                    <th class="py-3 px-4 text-left">Kelas</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-700">
+                @foreach($jadwalKuliah as $index => $jadwal)
+                    <tr class="border-b hover:bg-blue-50">
+                        <td class="py-3 px-4">{{ $index + 1 }}</td>
+                        <td class="py-3 px-4">{{ $jadwal->mataKuliah->nama_mata_kuliah ?? '-' }}</td>
+                        <td class="py-3 px-4">{{ $jadwal->hari }}</td>
+                        <td class="py-3 px-4">
+                            {{ \Carbon\Carbon::parse($jadwal->jam_mulai)->format('H:i') }} - 
+                            {{ \Carbon\Carbon::parse($jadwal->jam_selesai)->format('H:i') }}
+                        </td>
+                        <td class="py-3 px-4">{{ $jadwal->kelas }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    @endif
+</div>
 @endsection

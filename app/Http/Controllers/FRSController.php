@@ -12,9 +12,6 @@ use Illuminate\Support\Facades\Auth;
 
 class FRSController extends Controller
 {
-    /**
-     * Menampilkan daftar FRS mahasiswa
-     */
     public function index()
     {
         $mahasiswa = Auth::guard('mahasiswa')->user();
@@ -41,10 +38,7 @@ class FRSController extends Controller
         return view('mahasiswa.frs.create', compact('jadwalKuliah'));
     }
 
-    /**
-     * Menyimpan FRS baru
-     */
-    public function store(Request $request)
+        public function store(Request $request)
     {
         $request->validate([
             'id_jadwal_kuliah' => 'required|exists:jadwal_kuliah,id_jadwal_kuliah',
@@ -85,10 +79,6 @@ class FRSController extends Controller
         $id->delete();
         return redirect()->route('mahasiswa.frs.index')->with('success_destroy', 'FRS berhasil dibatalkan');
     }
-
-    /**
-     * Daftar FRS yang perlu diapprove oleh dosen wali
-     */
     public function approvalIndex()
     {
         $dosen = Auth::guard('dosen')->user();
@@ -103,10 +93,6 @@ class FRSController extends Controller
 
         return view('dosen.frs.index', compact('frsList'));
     }
-
-    /**
-     * Approve FRS mahasiswa
-     */
     public function approve($id)
     {
         $dosen = Auth::guard('dosen')->user();
@@ -117,14 +103,12 @@ class FRSController extends Controller
         
         $frs = FRS::findOrFail($id);
         
-        // Pastikan dosen hanya bisa approve FRS yang dia sebagai wali
         if ($frs->id_dosen_wali != $dosen->id_dosen) {
             return redirect()->back()->with('error', 'Anda tidak berhak menyetujui FRS ini');
         }
         
         $frs->update(['status_acc' => 'approved']);
         
-        // Tambahkan ke tabel nilai jika belum ada
         $nilaiExists = Nilai::where('id_frs', $frs->id_frs)->exists();
         if (!$nilaiExists) {
             Nilai::create([
@@ -136,10 +120,6 @@ class FRSController extends Controller
         
         return back()->with('success', 'FRS berhasil disetujui');
     }
-
-    /**
-     * Reject FRS mahasiswa
-     */
     public function reject($id)
     {
         $dosen = Auth::guard('dosen')->user();
@@ -149,8 +129,6 @@ class FRSController extends Controller
         }
         
         $frs = FRS::findOrFail($id);
-        
-        // Pastikan dosen hanya bisa reject FRS yang dia sebagai wali
         if ($frs->id_dosen_wali != $dosen->id_dosen) {
             return redirect()->back()->with('error', 'Anda tidak berhak menolak FRS ini');
         }

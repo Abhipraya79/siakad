@@ -19,24 +19,39 @@
          * Tambahan untuk kebutuhan mahasiswa: Fetch jadwal kuliah dengan relasi mata kuliah
          */
         public function jadwalMahasiswa()
-    {
-        $jadwalKuliah = JadwalKuliah::with('mataKuliah')->get();
+{
+    $mahasiswa = auth('mahasiswa')->user();
 
-        return view('mahasiswa.jadwal.index', compact('jadwalKuliah'));
+    if (!$mahasiswa) {
+        abort(403, 'Mahasiswa tidak ditemukan.');
     }
+
+    $frsList = $mahasiswa->frs()
+        ->where('status_acc', 'approved')
+        ->with('jadwalKuliah.mataKuliah', 'jadwalKuliah.ruangan', 'jadwalKuliah.dosen')
+        ->get();
+
+    return view('mahasiswa.jadwal.index', compact('frsList'));
+}
+
     public function jadwalDosen()
 {
-     $dosen = auth('dosen')->user();
+    $dosen = auth('dosen')->user();
 
     if (!$dosen) {
-        abort(403, 'Dosen tidak ditemukan untuk user ini.');
+        abort(403, 'Dosen tidak ditemukan.');
     }
 
     $jadwalKuliah = JadwalKuliah::with(['mataKuliah', 'ruangan'])
-        ->where('id_dosen', $dosen->id)
+        ->where('id_dosen', $dosen->id_dosen)
         ->get();
 
     return view('dosen.jadwal.index', compact('jadwalKuliah'));
+}
+
+public function ruangan()
+{
+    return $this->belongsTo(Ruangan::class, 'id_ruangan', 'id_ruangan');
 }
 
     }
