@@ -12,13 +12,16 @@
         <!-- Pilih Jadwal -->
         <div class="mb-4">
             <label for="jadwalSelect" class="block text-gray-700 font-medium mb-2">Jadwal Kuliah</label>
-            <select name="id_jadwal_kuliah" id="jadwalSelect" class="border border-gray-300 rounded px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-400">
+            <select name="id_jadwal_kuliah" id="jadwalSelect" class="border border-gray-300 rounded px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-400" required>
                 <option value="">-- Pilih Jadwal --</option>
                 @foreach($jadwalKuliah as $j)
                 <option 
                     value="{{ $j->id_jadwal_kuliah }}"
                     data-matkul="{{ $j->mataKuliah->nama_mata_kuliah }}"
-                    data-sks="{{ $j->mataKuliah->sks }}">
+                    data-sks="{{ $j->mataKuliah->sks }}"
+                    data-hari="{{ $j->hari }}"
+                    data-jammulai="{{ $j->jam_mulai }}"
+                    data-jamselesai="{{ $j->jam_selesai }}">
                     {{ $j->mataKuliah->nama_mata_kuliah }}
                 </option>
                 @endforeach
@@ -35,6 +38,24 @@
         <div class="mb-4">
             <label for="sksInput" class="block text-gray-700 font-medium mb-2">SKS</label>
             <input type="text" id="sksInput" class="border border-gray-300 rounded px-4 py-2 w-full bg-gray-100 cursor-not-allowed" readonly>
+        </div>
+
+        <!-- Hari -->
+        <div class="mb-4">
+            <label for="hariInput" class="block text-gray-700 font-medium mb-2">Hari</label>
+            <input type="text" id="hariInput" class="border border-gray-300 rounded px-4 py-2 w-full bg-gray-100 cursor-not-allowed" readonly>
+        </div>
+
+        <!-- Jam Mulai -->
+        <div class="mb-4">
+            <label for="jamMulaiInput" class="block text-gray-700 font-medium mb-2">Jam Mulai</label>
+            <input type="text" id="jamMulaiInput" class="border border-gray-300 rounded px-4 py-2 w-full bg-gray-100 cursor-not-allowed" readonly>
+        </div>
+
+        <!-- Jam Selesai -->
+        <div class="mb-4">
+            <label for="jamSelesaiInput" class="block text-gray-700 font-medium mb-2">Jam Selesai</label>
+            <input type="text" id="jamSelesaiInput" class="border border-gray-300 rounded px-4 py-2 w-full bg-gray-100 cursor-not-allowed" readonly>
         </div>
 
         <!-- Semester -->
@@ -54,6 +75,9 @@
         const selected = this.options[this.selectedIndex];
         document.getElementById('matkulInput').value = selected.getAttribute('data-matkul');
         document.getElementById('sksInput').value = selected.getAttribute('data-sks');
+        document.getElementById('hariInput').value = selected.getAttribute('data-hari');
+        document.getElementById('jamMulaiInput').value = selected.getAttribute('data-jammulai');
+        document.getElementById('jamSelesaiInput').value = selected.getAttribute('data-jamselesai');
     });
 </script>
 @endsection

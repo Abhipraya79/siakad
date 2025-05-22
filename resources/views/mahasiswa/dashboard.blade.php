@@ -52,7 +52,6 @@
         </div>
     </div>
 </div>
-<!-- Section 2 -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 px-4 py-6">
     <div class="bg-white p-4 rounded-lg shadow">
         <h3 class="font-medium text-gray-500">IPK</h3>
@@ -64,14 +63,12 @@
     </div>
 </div>
 
-<!-- Descriptive Text Section -->
-
 <div class="grid grid-cols-1 bg-white p-5 rounded-lg shadow mb-6">    <p class="text-gray-600">
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+        "Halo, {{ $mahasiswa->nama }}! Selamat datang di Dashboard SIAKAD.
+Tetap semangat belajar, dan pantau terus informasi akademikmu di sini!"
     </p>
 </div>
 
-<!-- Bottom Section -->
 <div class="bg-white rounded-lg shadow overflow-hidden mb-6">
     <div class="p-4 border-b border-gray-200">
         <h3 class="font-semibold">Jadwal Kuliah Hari Ini</h3>
@@ -83,7 +80,6 @@
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Mata Kuliah</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Dosen</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Waktu</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ruang</th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
@@ -92,7 +88,6 @@
                         <td class="px-6 py-4 whitespace-nowrap">{{ $jadwal->mataKuliah->nama_mata_kuliah }}</td>
                         <td class="px-6 py-4 whitespace-nowrap">{{ $jadwal->dosen->nama }}</td>
                         <td class="px-6 py-4 whitespace-nowrap">{{ $jadwal->jam_mulai }} - {{ $jadwal->jam_selesai }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ $jadwal->ruangan->nama_ruang }}</td>
                     </tr>
                 @empty
                     <tr>

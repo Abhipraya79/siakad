@@ -28,15 +28,21 @@ class FRSController extends Controller
      * Menampilkan form untuk membuat FRS baru
      */
     public function create()
-    {
-        $mahasiswa = Auth::guard('mahasiswa')->user();
-        if (!$mahasiswa) {
-            return redirect()->back()->with('error', 'Anda tidak memiliki akses sebagai mahasiswa');
-        }
-
-        $jadwalKuliah = JadwalKuliah::with('mataKuliah')->get();
-        return view('mahasiswa.frs.create', compact('jadwalKuliah'));
+{
+    $mahasiswa = Auth::guard('mahasiswa')->user();
+    if (!$mahasiswa) {
+        return redirect()->back()->with('error', 'Anda tidak memiliki akses sebagai mahasiswa');
     }
+
+    $frsTaken = $mahasiswa->frs()->pluck('id_jadwal_kuliah')->toArray();
+   
+    $jadwalKuliah = JadwalKuliah::with('mataKuliah')
+        ->whereNotIn('id_jadwal_kuliah', $frsTaken)
+        ->get();
+
+    return view('mahasiswa.frs.create', compact('jadwalKuliah'));
+}
+
 
         public function store(Request $request)
     {
@@ -118,7 +124,7 @@ class FRSController extends Controller
 ]);
         }
         
-        return back()->with('success', 'FRS berhasil disetujui');
+        return back()->with('success');
     }
     public function reject($id)
     {

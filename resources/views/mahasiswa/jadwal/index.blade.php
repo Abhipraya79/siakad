@@ -21,7 +21,6 @@
                         <th class="py-3 px-4 text-left">Kelas</th>
                         <th class="py-3 px-4 text-left">Jam Mulai</th>
                         <th class="py-3 px-4 text-left">Jam Selesai</th>
-                        <th class="py-3 px-4 text-left">Ruangan</th>
                         <th class="py-3 px-4 text-left">Dosen</th>
                     </tr>
                 </thead>
@@ -38,7 +37,6 @@
                             <td class="py-3 px-4">{{ $jadwal->kelas ?? '-' }}</td>
                             <td class="py-3 px-4">{{ \Carbon\Carbon::parse($jadwal->jam_mulai)->format('H:i') }}</td>
                             <td class="py-3 px-4">{{ \Carbon\Carbon::parse($jadwal->jam_selesai)->format('H:i') }}</td>
-                            <td class="py-3 px-4">{{ $ruangan->nama_ruangan ?? '-' }}</td>
                             <td class="py-3 px-4">{{ $dosen->nama ?? '-' }}</td>
                         </tr>
                     @endforeach

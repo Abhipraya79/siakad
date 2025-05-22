@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Mahasiswa;
 use App\Models\Dosen;
+use App\Models\FRS;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 class MahasiswaController extends Controller
@@ -75,34 +76,52 @@ class MahasiswaController extends Controller
         $mahasiswa->delete();
         return redirect()->route('mahasiswa.index')->with('success', 'Mahasiswa berhasil dihapus');
     }
-
     public function dashboard()
 {
-    
     $mahasiswa = auth('mahasiswa')->user();
 
-    $frs = $mahasiswa->frs()->with('jadwalKuliah.mataKuliah')->get();
+    $hariIni = Carbon::now()->locale('id')->isoFormat('dddd'); 
+    $jadwalHariIni = FRS::where('id_mahasiswa', $mahasiswa->id_mahasiswa)
+        ->where('status_acc', 'approved')
+        ->whereHas('jadwalKuliah', function ($query) use ($hariIni) {
+            $query->where('hari', $hariIni);
+        })
+        ->with(['jadwalKuliah.mataKuliah', 'jadwalKuliah.dosen', 'jadwalKuliah.ruangan'])
+        ->get()
+        ->map(function ($frs) {
+            return $frs->jadwalKuliah;
+        });
 
-    $totalSks = $frs->sum(fn($frs) => $frs->jadwalKuliah->mataKuliah->sks ?? 0);
+    $totalSks = $mahasiswa->frs()
+        ->where('status_acc', 'approved')
+        ->with('jadwalKuliah.mataKuliah')
+        ->get()
+        ->sum(function ($frs) {
+            return $frs->jadwalKuliah->mataKuliah->sks ?? 0;
+        });
 
-    $ipk = $mahasiswa->ipk ?? 0;
+    $jumlahMatkul = $mahasiswa->frs()->where('status_acc', 'approved')->count();
+    $jumlahUserAktif = \App\Models\Mahasiswa::count(); 
 
-    $semesterAktif = $mahasiswa->semester_aktif ?? '-';
+   
+    $nilai = \App\Models\Nilai::whereHas('frs', function ($query) use ($mahasiswa) {
+        $query->where('id_mahasiswa', $mahasiswa->id_mahasiswa);
+    })->get();
 
-    $hariIni = Carbon::now()->translatedFormat('l');
+    $totalNilai = $nilai->sum('nilai_angka');
+    $jumlahNilai = $nilai->whereNotNull('nilai_angka')->count();
+    $ipk = $jumlahNilai > 0 ? $totalNilai / $jumlahNilai : 0;
 
-    $jadwalHariIni = $frs
-        ->filter(fn($frs) => optional($frs->jadwalKuliah)->hari === $hariIni)
-        ->map(fn($frs) => $frs->jadwalKuliah)
-        ->filter()
-        ->unique('id_jadwal_kuliah'); 
+    $semesterAktif = $mahasiswa->frs()->max('semester');
 
     return view('mahasiswa.dashboard', compact(
         'mahasiswa',
+        'jadwalHariIni',
         'totalSks',
+        'jumlahMatkul',
+        'jumlahUserAktif',
         'ipk',
-        'semesterAktif',
-        'jadwalHariIni'
+        'semesterAktif'
     ));
 }
 }
