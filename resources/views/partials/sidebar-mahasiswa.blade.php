@@ -1,7 +1,6 @@
-<aside class="fixed top-0 left-0 z-40 w-56 h-screen pt-14 transition-transform -translate-x-full bg-orange-60 border-r border-gray-200 md:translate-x-0">
-    <div class="overflow-y-auto py-5 px-3 h-full bg-orange-60">
-
-        <h2 class="text-4xl font-bold text-center mb-6 text-blue-600 drop-shadow-md animate-fade-in">
+<aside class="fixed top-0 left-0 z-40 w-56 h-screen pt-14 transition-transform -translate-x-full border-r border-gray-200 md:translate-x-0 " style="background-color: #14487a;">
+<div class="overflow-y-auto py-5 px-3 h-full">
+        <h2 class="text-4xl font-bold text-center mb-6 drop-shadow-md animate-fade-in" style="color: #f3c903;">
             Siakad MIS
         </h2>
 
@@ -51,20 +50,6 @@
                     <span class="ml-3">Nilai</span>
                 </a>
             </li>
-            <li>
-    <form method="POST" action="{{ route('logout') }}">
-        @csrf
-        <a href="{{ route('welcome') }}"
-           onclick="event.preventDefault(); this.closest('form').submit();"
-           class="nav-link">
-            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 11-2 0V5H5v10h10v-2a1 1 0 112 0v3a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm11.707 5.293a1 1 0 00-1.414 1.414L15.586 12H9a1 1 0 100 2h6.586l-2.293 2.293a1 1 0 101.414 1.414l4-4a1 1 0 000-1.414l-4-4z" clip-rule="evenodd" />
-            </svg>
-            <span class="ml-3">Logout</span>
-        </a>
-    </form>
-</li>
-
         </ul>
     </div>
 </aside>
