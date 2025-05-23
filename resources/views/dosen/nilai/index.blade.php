@@ -27,7 +27,7 @@
         <table class="min-w-full text-sm text-left text-gray-700">
             <thead class="bg-yellow-400 text-white uppercase text-xs tracking-wider">
                 <tr>
-                    <th class="px-6 py-3">NIM</th>
+                    <th class="px-6 py-3">NRP</th>
                     <th class="px-6 py-3">Nama Mahasiswa</th>
                     <th class="px-6 py-3">Mata Kuliah</th>
                     <th class="px-6 py-3">SKS</th>
@@ -38,7 +38,7 @@
             <tbody class="divide-y divide-gray-200">
                 @foreach($nilaiList as $nilai)
                 <tr class="hover:bg-yellow-50 transition duration-150 ease-in-out">
-                    <td class="px-6 py-4">{{ $nilai->mahasiswa->nim ?? 'N/A' }}</td>
+                    <td class="px-6 py-4">{{ $nilai->mahasiswa->nrp ?? 'N/A' }}</td>
                     <td class="px-6 py-4">{{ $nilai->mahasiswa->nama ?? 'Data Tidak Lengkap' }}</td>
                     <td class="px-6 py-4">
                         {{ $nilai->jadwalKuliah->mataKuliah->nama_mata_kuliah ?? 'Data Tidak Lengkap' }}

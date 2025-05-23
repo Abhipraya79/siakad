@@ -6,12 +6,11 @@
 @section('content')
 <div class="max-w-lg w-full bg-white rounded-2xl shadow-xl overflow-hidden">
   <div class="p-6 text-center">
-    
-    {{-- Judul --}}
+
     <h2 class="text-2xl font-bold mb-1">Sistem Akademik</h2>
     <p class="text-gray-500 mb-6">Pilih login sesuai peran Anda</p>
 
-    {{-- Tombol Role --}}
+
     <div class="space-y-4">
       <a href="{{ route('login.role',['role'=>'dosen']) }}"
          class="flex items-center justify-center gap-2 w-full py-3 rounded-lg border-2 border-indigo-600 text-indigo-600 font-medium hover:bg-indigo-50">

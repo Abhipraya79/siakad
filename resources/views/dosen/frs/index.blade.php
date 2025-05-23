@@ -19,7 +19,7 @@
     @endif
 
     <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
-        <thead class="bg-blue-600 text-white">
+        <thead class="bg-[#14487a] text-white">
             <tr>
                 <th class="py-3 px-4 text-left">Mahasiswa</th>
                 <th class="py-3 px-4 text-left">Mata Kuliah</th>

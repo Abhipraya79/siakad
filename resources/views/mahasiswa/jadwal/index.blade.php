@@ -15,7 +15,7 @@
         <div class="mb-10">
             <h2 class="text-xl font-semibold mb-4 text-blue-700">{{ $hari }}</h2>
             <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden mb-4">
-                <thead class="bg-blue-600 text-white">
+                <thead class="bg-[#14487a] text-white">
                     <tr>
                         <th class="py-3 px-4 text-left">Mata Kuliah</th>
                         <th class="py-3 px-4 text-left">Kelas</th>

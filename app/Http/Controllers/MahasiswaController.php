@@ -102,25 +102,19 @@ class MahasiswaController extends Controller
 
     $jumlahMatkul = $mahasiswa->frs()->where('status_acc', 'approved')->count();
     $jumlahUserAktif = \App\Models\Mahasiswa::count(); 
-
-   
     $nilai = \App\Models\Nilai::whereHas('frs', function ($query) use ($mahasiswa) {
         $query->where('id_mahasiswa', $mahasiswa->id_mahasiswa);
     })->get();
 
     $totalNilai = $nilai->sum('nilai_angka');
     $jumlahNilai = $nilai->whereNotNull('nilai_angka')->count();
-    $ipk = $jumlahNilai > 0 ? $totalNilai / $jumlahNilai : 0;
-
     $semesterAktif = $mahasiswa->frs()->max('semester');
-
     return view('mahasiswa.dashboard', compact(
         'mahasiswa',
         'jadwalHariIni',
         'totalSks',
         'jumlahMatkul',
         'jumlahUserAktif',
-        'ipk',
         'semesterAktif'
     ));
 }

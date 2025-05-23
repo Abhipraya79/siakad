@@ -163,7 +163,7 @@ class NilaiController extends Controller
             }
 
             DB::commit();
-            return redirect()->route('dosen.nilai.index')->with('success', 'Nilai berhasil disimpan');
+            return redirect()->route('dosen.nilai.index');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());

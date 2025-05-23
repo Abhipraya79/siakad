@@ -49,9 +49,4 @@
     return view('dosen.jadwal.index', compact('jadwalKuliah'));
 }
 
-public function ruangan()
-{
-    return $this->belongsTo(Ruangan::class, 'id_ruangan', 'id_ruangan');
-}
-
     }

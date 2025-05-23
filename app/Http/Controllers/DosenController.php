@@ -85,24 +85,21 @@
             ->with('error', 'Anda harus login terlebih dahulu.');
     }
     
-    // Log untuk debugging
+   
     \Log::info('Dashboard dosen diakses', [
         'id_dosen' => $dosen->id_dosen,
         'username' => $dosen->username ?? 'unknown'
     ]);
     
-    // Mahasiswa yang dibimbing oleh dosen ini - pastikan id_dosen_wali ada di model Mahasiswa
     $mahasiswa = Mahasiswa::where('id_dosen_wali', $dosen->id_dosen)->get();
     $totalMahasiswa = $mahasiswa->count();
     
-    // Query FRS dengan relasi
     $frsPending = \App\Models\Frs::whereIn('id_mahasiswa', $mahasiswa->pluck('id_mahasiswa'))
         ->where('status_acc', 'pending')
         ->with(['mahasiswa', 'jadwalKuliah.mataKuliah']) 
         ->get();
     $totalFrsPending = $frsPending->count();
 
-    // Total mata kuliah yang diampu oleh dosen ini
     $totalMataKuliah = $dosen->jadwalMataKuliah()->count();
 
     return view('dosen.dashboard', compact(

@@ -21,10 +21,6 @@
                 <p class="text-gray-600">SKS:</p>
                 <p class="font-medium">{{ $jadwalKuliah->mataKuliah->sks }}</p>
             </div>
-            <div>
-                <p class="text-gray-600">Semester:</p>
-                <p class="font-medium">{{ $jadwalKuliah->semester }}</p>
-            </div>
         </div>
     </div>
 
@@ -42,7 +38,7 @@
                     <thead class="bg-gray-100">
                         <tr>
                             <th class="px-4 py-3 text-left">No</th>
-                            <th class="px-4 py-3 text-left">NIM</th>
+                            <th class="px-4 py-3 text-left">NRP</th>
                             <th class="px-4 py-3 text-left">Nama Mahasiswa</th>
                             <th class="px-4 py-3 text-left">Nilai Angka</th>
                             <th class="px-4 py-3 text-left">Nilai Huruf</th>
@@ -52,7 +48,7 @@
                         @foreach($frsList as $index => $frs)
                             <tr class="{{ $index % 2 == 0 ? 'bg-white' : 'bg-gray-50' }}">
                                 <td class="border px-4 py-3">{{ $index + 1 }}</td>
-                                <td class="border px-4 py-3">{{ $frs->mahasiswa->nim }}</td>
+                                <td class="border px-4 py-3">{{ $frs->mahasiswa->nrp }}</td>
                                 <td class="border px-4 py-3">{{ $frs->mahasiswa->nama }}</td>
                                 <td class="border px-4 py-3">
                                     <input 
@@ -85,7 +81,7 @@
             </div>
             
             <div class="flex gap-3">
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-md">
+                <button type="submit" class="bg-[#14487a] hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-md">
                     Simpan Nilai
                 </button>
                 <a href="{{ route('dosen.nilai.index') }}" class="bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-6 rounded-md">
