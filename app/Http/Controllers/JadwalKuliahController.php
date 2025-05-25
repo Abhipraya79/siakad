@@ -15,9 +15,6 @@
             $jadwalKuliah = JadwalKuliah::with(['mataKuliah', 'dosen', 'ruangan'])->get();
             return view('mahasiswa.jadwal.index', compact('jadwalKuliah'));
         }
-        /**
-         * Tambahan untuk kebutuhan mahasiswa: Fetch jadwal kuliah dengan relasi mata kuliah
-         */
         public function jadwalMahasiswa()
 {
     $mahasiswa = auth('mahasiswa')->user();

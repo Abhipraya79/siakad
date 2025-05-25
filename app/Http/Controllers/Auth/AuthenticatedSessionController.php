@@ -27,19 +27,12 @@ class AuthenticatedSessionController extends Controller
         return view('auth.login', compact('role'));
     }
 
-    /**
-     * Tampilkan form login umum (jika ingin tanpa role di URL).
-     */
+
     public function create(Request $request): View
     {
-        // Bisa fallback ke mahasiswa atau default
         $role = $request->query('role', self::ROLE_MAHASISWA);
         return view('auth.login', compact('role'));
     }
-
-    /**
-     * Proses autentikasi dan redirect berdasarkan role.
-     */
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
@@ -48,7 +41,6 @@ class AuthenticatedSessionController extends Controller
         $user = Auth::user();
         $inputRole = request('role'); 
 
-        // Pastikan login di halaman role yang sesuai
         if ($user->role !== $inputRole) {
             Auth::logout();
             return redirect()->route('login.role', ['role' => $inputRole])
@@ -57,7 +49,6 @@ class AuthenticatedSessionController extends Controller
                               ]);
         }
 
-        // Redirect ke dashboard sesuai role
         if ($user->role === self::ROLE_MAHASISWA) {
             return redirect()->route('mahasiswa.dashboard');
         }
@@ -65,14 +56,8 @@ class AuthenticatedSessionController extends Controller
         if ($user->role === self::ROLE_DOSEN) {
             return redirect()->route('dosen.dashboard');
         }
-
-        // Fallback ke HOME
         return redirect()->intended(RouteServiceProvider::HOME);
     }
-
-    /**
-     * Logout user.
-     */
     public function destroy(Request $request): RedirectResponse
     {
         Auth::guard('web')->logout();

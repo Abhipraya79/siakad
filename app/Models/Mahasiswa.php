@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+
 
 class Mahasiswa extends Authenticatable
 {
     use Notifiable;
+    use HasApiTokens;
 
     protected $table = 'mahasiswa';
     protected $guard = 'mahasiswa';
@@ -28,7 +31,7 @@ class Mahasiswa extends Authenticatable
         'remember_token',
     ];
 
-    // Auto-hash password
+  
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = bcrypt($value);
@@ -39,19 +42,16 @@ class Mahasiswa extends Authenticatable
     return $this->hasOne(User::class, 'id_reference', 'id_mahasiswa');
 }
 
-    /** Relasi: mahasiswa memiliki dosen wali */
     public function dosenWali()
     {
         return $this->belongsTo(Dosen::class, 'id_dosen_wali', 'id_dosen');
     }
 
-    /** Relasi: mahasiswa membuat banyak FRS */
     public function frs()
     {
         return $this->hasMany(FRS::class, 'id_mahasiswa', 'id_mahasiswa');
     }
 
-    /** Relasi: mahasiswa memiliki nilai melalui FRS */
     public function nilai()
     {
         return $this->hasManyThrough(

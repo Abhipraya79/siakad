@@ -14,7 +14,6 @@ use App\Http\Controllers\JadwalKuliahController;
 |--------------------------------------------------------------------------
 */
 
-// Halaman awal (Welcome)
 Route::get('/', fn() => view('welcome'))->name('welcome');
 
 // Route login default (wajib ada untuk auth middleware Laravel)
@@ -65,4 +64,11 @@ Route::prefix('dosen')
         Route::put('/nilai/{id_nilai}', [NilaiController::class, 'update'])->name('nilai.update'); // ✅ Tambahkan ini
         Route::get('/jadwal',               [JadwalKuliahController::class, 'jadwalDosen'])->name('jadwal.index');
     
+        });
+
+        // ===================== API ROUTES =====================\\
+        Route::get('/test', function () {
+            return response([
+                'message' => 'API is working'
+            ], 200); 
         });
