@@ -3,14 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
+
 
 
 class Mahasiswa extends Authenticatable
 {
-    use Notifiable;
-    use HasApiTokens;
+    use Notifiable, HasApiTokens;
 
     protected $table = 'mahasiswa';
     protected $guard = 'mahasiswa';
@@ -63,4 +63,9 @@ class Mahasiswa extends Authenticatable
             'id_frs'  
         );
     }
+    public function getAuthIdentifierName()
+{
+    return 'username'; // bukan 'email'
+}
+
 }

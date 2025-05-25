@@ -3,14 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
 
 
 class Dosen extends Authenticatable
 {
-    use Notifiable;
-    use HasApiTokens;
+    use Notifiable, HasApiTokens;
     protected $table = 'dosen';
     protected $guard = 'dosen';
     protected $primaryKey = 'id_dosen';
@@ -55,6 +54,11 @@ class Dosen extends Authenticatable
 {
     return $this->hasMany(Frs::class, 'id_dosen_wali', 'id_dosen');
 }
+public function getAuthIdentifierName()
+{
+    return 'username';
+}
+
 
 }
 

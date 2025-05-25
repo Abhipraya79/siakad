@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
-use App\Http\Controllers\Controller;
+use App\Models\Dosen;
+use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
@@ -18,23 +21,38 @@ class LoginController extends Controller
 
     public function authenticate(Request $request)
     {
-        $role = $request->input('role');
-        $guard = $role;
-
-        $credentials = $request->validate([
+        // Validasi input: gunakan username bukan username
+        $request->validate([
             'username' => 'required|string',
-            'password' => 'required|string',
+            'password'   => 'required|string',
+            'role'       => 'required|in:mahasiswa,dosen',
         ]);
 
-        if (Auth::guard($guard)->attempt($credentials)) {
-            $request->session()->regenerate();
-            return redirect()->route("$role.dashboard");
+        $role  = $request->input('role');
+        $guard = 'web_' . $role; // Contoh: web_mahasiswa
+
+        // Ambil user dari tabel sesuai role
+        if ($role === 'mahasiswa') {
+            $user = Mahasiswa::where('nrp', $request->username)->first();
+        } else {
+            $user = Dosen::where('nidn', $request->username)->first();
         }
 
-        return back()->withErrors([
-            'username' => 'Username atau password salah.',
-        ])->withInput(['username' => $credentials['username']]);
+        // Cek kredensial
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return back()->withErrors([
+                'username' => 'username atau password salah.',
+            ])->withInput();
+        }
+
+        // Login via guard session
+        Auth::guard($guard)->login($user);
+        $request->session()->regenerate();
+
+        // Redirect sesuai role
+        return redirect()->route("{$role}.dashboard");
     }
+
     public function logout(Request $request)
     {
         Auth::guard('mahasiswa')->logout();
