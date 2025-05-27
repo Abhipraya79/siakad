@@ -65,7 +65,7 @@ class Mahasiswa extends Authenticatable
     }
     public function getAuthIdentifierName()
 {
-    return 'username'; // bukan 'email'
+    return 'username';
 }
 
 }

@@ -23,7 +23,7 @@ class Frs extends Model
     ];
 
     protected $casts = [
-        'status_acc' => 'string', // pending, approved, rejected
+        'status_acc' => 'string',
         'semester' => 'integer'
     ];
 

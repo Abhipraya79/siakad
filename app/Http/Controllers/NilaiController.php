@@ -78,25 +78,27 @@ class NilaiController extends Controller
         return view('dosen.nilai.list_jadwal', compact('jadwalList'));
     }
 
-    public function create($id_jadwal_kuliah)
-    {
-        $dosen = Auth::guard('dosen')->user();
-        if (!$dosen) {
-            return redirect()->back()->with('error', 'Anda tidak memiliki akses sebagai dosen');
-        }
-
-        $jadwalKuliah = JadwalKuliah::with('mataKuliah')
-            ->where('id_jadwal_kuliah', $id_jadwal_kuliah)
-            ->where('id_dosen', $dosen->id_dosen)
-            ->firstOrFail();
-
-        $frsList = FRS::where('id_jadwal_kuliah', $id_jadwal_kuliah)
-            ->where('status_acc', 'approved')
-            ->with(['mahasiswa', 'nilai'])
-            ->get();
-
-        return view('dosen.nilai.create', compact('jadwalKuliah', 'frsList'));
+    public function create($id_frs)
+{
+    $dosen = Auth::guard('dosen')->user();
+    if (!$dosen) {
+        return redirect()->back()->with('error', 'Anda tidak memiliki akses sebagai dosen');
     }
+
+    $frs = FRS::with(['mahasiswa', 'jadwalKuliah.mataKuliah', 'nilai'])
+        ->where('id_frs', $id_frs)
+        ->firstOrFail();
+
+    // Pastikan dosen pengampu
+    if ($frs->jadwalKuliah->id_dosen != $dosen->id_dosen) {
+        return redirect()->back()->with('error', 'Anda tidak berhak menginput nilai untuk mahasiswa ini');
+    }
+
+    return view('dosen.nilai.create', [
+        'frs' => $frs,
+        'jadwalKuliah' => $frs->jadwalKuliah
+    ]);
+}
 
     public function getMahasiswaList($id_jadwal_kuliah)
     {
@@ -130,45 +132,31 @@ class NilaiController extends Controller
         return response()->json(['data' => $mahasiswaList]);
     }
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'id_jadwal_kuliah' => 'required|exists:jadwal_kuliah,id_jadwal_kuliah',
-            'nilai' => 'required|array',
-            'nilai.*.angka' => 'nullable|numeric|min:0|max:100',
-            'nilai.*.huruf' => 'nullable|string|max:2'
-        ]);
+public function store(Request $request)
+{
+    $request->validate([
+        'id_frs' => 'required|exists:frs,id_frs',
+        'nilai_angka' => 'required|numeric|min:0|max:100',
+        'nilai_huruf' => 'required|string|max:2'
+    ]);
 
-        $dosen = Auth::guard('dosen')->user();
-        $jadwalKuliah = JadwalKuliah::where('id_jadwal_kuliah', $request->id_jadwal_kuliah)
-            ->where('id_dosen', $dosen->id_dosen)
-            ->firstOrFail();
+    $dosen = Auth::guard('dosen')->user();
+    $frs = FRS::with('jadwalKuliah')->findOrFail($request->id_frs);
 
-        DB::beginTransaction();
-
-        try {
-            foreach ($request->nilai as $id_frs => $nilaiData) {
-                $angka = $nilaiData['angka'];
-                $huruf = $nilaiData['huruf'] ?? $this->konversiNilai($angka);
-
-                if ($angka !== null) {
-                    Nilai::updateOrCreate(
-                        ['id_frs' => $id_frs],
-                        [
-                            'nilai_angka' => $angka,
-                            'nilai_huruf' => strtoupper($huruf)
-                        ]
-                    );
-                }
-            }
-
-            DB::commit();
-            return redirect()->route('dosen.nilai.index');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
-        }
+    if ($frs->jadwalKuliah->id_dosen != $dosen->id_dosen) {
+        return redirect()->back()->with('error', 'Anda tidak berhak menginput nilai untuk mahasiswa ini');
     }
+
+    Nilai::updateOrCreate(
+        ['id_frs' => $frs->id_frs],
+        [
+            'nilai_angka' => $request->nilai_angka,
+            'nilai_huruf' => strtoupper($request->nilai_huruf)
+        ]
+    );
+
+    return redirect()->route('dosen.nilai.index')->with('success', 'Nilai berhasil disimpan');
+}
 
     public function edit($id)
 {

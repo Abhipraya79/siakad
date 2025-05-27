@@ -16,19 +16,13 @@ use App\Http\Controllers\JadwalKuliahController;
 
 Route::get('/', fn() => view('welcome'))->name('welcome');
 
-// Route login default (wajib ada untuk auth middleware Laravel)
 Route::get('/login', fn() => redirect()->route('login.role', ['role' => 'mahasiswa']))->name('login');
 
-// Routes untuk guest (belum login)
 Route::middleware('guest')->group(function () {
-    // Form login per role: /login/mahasiswa atau /login/dosen
     Route::get('/login/{role}', [LoginController::class, 'show'])->name('login.role');
-
-    // Proses autentikasi
     Route::post('/login', [LoginController::class, 'authenticate'])->name('login.perform');
 });
 
-// Route untuk semua user yang sudah login (logout)
 Route::middleware(['web'])->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });
@@ -58,17 +52,10 @@ Route::prefix('dosen')
         Route::post('/frs/{id}/reject',     [FRSController::class, 'reject'])->name('frs.reject');
         // Nilai - Dosen
         Route::get('/nilai', [NilaiController::class, 'index'])->name('nilai.index');
-        Route::get('/nilai/create/{id_jadwal_kuliah}', [NilaiController::class, 'create'])->name('nilai.create');
+        Route::get('/nilai/create/{id_frs}', [NilaiController::class, 'create'])->name('nilai.create');
         Route::post('/nilai', [NilaiController::class, 'store'])->name('nilai.store');
         Route::get('/nilai/{id_nilai}/edit', [NilaiController::class, 'edit'])->name('nilai.edit');
         Route::put('/nilai/{id_nilai}', [NilaiController::class, 'update'])->name('nilai.update'); // ✅ Tambahkan ini
         Route::get('/jadwal',               [JadwalKuliahController::class, 'jadwalDosen'])->name('jadwal.index');
     
-        });
-
-        // ===================== API ROUTES =====================\\
-        Route::get('/test', function () {
-            return response([
-                'message' => 'API is working'
-            ], 200); 
         });

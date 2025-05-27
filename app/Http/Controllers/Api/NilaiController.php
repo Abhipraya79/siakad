@@ -1,7 +1,8 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller; 
+use App\Http\Controllers\Controller;
 use App\Models\Nilai;
 use Illuminate\Http\Request;
 
@@ -12,12 +13,18 @@ class NilaiController extends Controller
         $this->middleware('auth:sanctum');
     }
 
+    // List semua nilai (dengan relasi mahasiswa dan jadwal)
     public function index()
     {
-        $nilai = Nilai::with(['frs.mahasiswa','frs.jadwalKuliah'])->get();
-        return response()->json(["status" => "success", "data" => $nilai]);
+        $nilai = Nilai::with(['frs.mahasiswa', 'frs.jadwalKuliah'])->get();
+
+        return response()->json([
+            "status" => "success",
+            "data" => $nilai
+        ]);
     }
 
+    // Tambah nilai
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -27,28 +34,75 @@ class NilaiController extends Controller
         ]);
 
         $nilai = Nilai::create($validated);
-        return response()->json(["status" => "success", "data" => $nilai], 201);
+
+        return response()->json([
+            "status" => "success",
+            "message" => "Nilai berhasil ditambahkan",
+            "data" => $nilai->load(['frs.mahasiswa', 'frs.jadwalKuliah'])
+        ], 201);
     }
 
-    public function show(Nilai $nilai)
+    // Detail nilai
+    public function show($id)
     {
-        return response()->json(["status" => "success", "data" => $nilai->load(['frs.mahasiswa','frs.jadwalKuliah'])]);
+        $nilai = Nilai::with(['frs.mahasiswa', 'frs.jadwalKuliah'])->find($id);
+
+        if (!$nilai) {
+            return response()->json([
+                "status" => "error",
+                "message" => "Nilai tidak ditemukan"
+            ], 404);
+        }
+
+        return response()->json([
+            "status" => "success",
+            "data" => $nilai
+        ]);
     }
 
-    public function update(Request $request, Nilai $nilai)
+    // Update nilai
+    public function update(Request $request, $id)
     {
+        $nilai = Nilai::find($id);
+
+        if (!$nilai) {
+            return response()->json([
+                "status" => "error",
+                "message" => "Nilai tidak ditemukan"
+            ], 404);
+        }
+
         $validated = $request->validate([
             'nilai_angka' => 'sometimes|integer|min:0|max:100',
             'nilai_huruf' => 'sometimes|string|max:2',
         ]);
 
         $nilai->update($validated);
-        return response()->json(["status" => "success", "data" => $nilai]);
+
+        return response()->json([
+            "status" => "success",
+            "message" => "Nilai berhasil diupdate",
+            "data" => $nilai->load(['frs.mahasiswa', 'frs.jadwalKuliah'])
+        ]);
     }
 
-    public function destroy(Nilai $nilai)
+    // Hapus nilai
+    public function destroy($id)
     {
+        $nilai = Nilai::find($id);
+
+        if (!$nilai) {
+            return response()->json([
+                "status" => "error",
+                "message" => "Nilai tidak ditemukan"
+            ], 404);
+        }
+
         $nilai->delete();
-        return response()->json(["status" => "success", "message" => "Deleted successfully"]);
+
+        return response()->json([
+            "status" => "success",
+            "message" => "Nilai berhasil dihapus"
+        ]);
     }
 }

@@ -57,7 +57,7 @@
                     </svg>
                 </div>
                 <div>
-                    <p class="text-gray-600 text-sm">User Aktif</p>
+                    <p class="text-gray-600 text-sm">Mahasiswa Aktif</p>
                     <h3 class="text-2xl font-bold text-gray-800">{{ $jumlahUserAktif ?? 0 }}</h3>
                 </div>
             </div>

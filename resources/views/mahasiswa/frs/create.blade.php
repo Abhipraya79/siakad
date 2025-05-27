@@ -5,7 +5,6 @@
 @section('content')
 <div class="min-h-screen bg-gray-50 py-8">
     <div class="max-w-lg mx-auto p-8 bg-white shadow-md rounded-xl">
-        <!-- Header -->
         <div class="text-center mb-8">
             <h1 class="text-2xl font-bold text-gray-800 mb-2">Buat FRS Baru</h1>
             <p class="text-gray-600 text-sm">Isi form di bawah untuk menambah mata kuliah</p>
@@ -14,7 +13,6 @@
         <form method="POST" action="{{ route('mahasiswa.frs.store') }}" class="space-y-5">
             @csrf
 
-            <!-- Pilih Jadwal -->
             <div>
                 <label for="jadwalSelect" class="block text-sm font-medium text-gray-700 mb-2">
                     Jadwal Kuliah
@@ -37,28 +35,22 @@
                 </select>
             </div>
 
-            <!-- Detail Mata Kuliah (Initially Hidden) -->
             <div id="detailSection" class="hidden space-y-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
                 <h3 class="font-medium text-gray-800 text-sm mb-3">Detail Mata Kuliah:</h3>
                 
                 <div class="grid grid-cols-2 gap-4">
-                    <!-- Nama Mata Kuliah -->
                     <div class="col-span-2">
                         <label class="block text-xs font-medium text-gray-600 mb-1">Nama Mata Kuliah</label>
                         <input type="text" id="matkulInput" 
                                class="w-full px-3 py-2 bg-white border border-gray-200 rounded text-sm font-medium text-gray-800" 
                                readonly>
                     </div>
-
-                    <!-- SKS -->
                     <div>
                         <label class="block text-xs font-medium text-gray-600 mb-1">SKS</label>
                         <input type="text" id="sksInput" 
                                class="w-full px-3 py-2 bg-white border border-gray-200 rounded text-sm font-medium text-gray-800" 
                                readonly>
                     </div>
-
-                    <!-- Hari -->
                     <div>
                         <label class="block text-xs font-medium text-gray-600 mb-1">Hari</label>
                         <input type="text" id="hariInput" 
@@ -66,15 +58,12 @@
                                readonly>
                     </div>
 
-                    <!-- Jam Mulai -->
                     <div>
                         <label class="block text-xs font-medium text-gray-600 mb-1">Jam Mulai</label>
                         <input type="text" id="jamMulaiInput" 
                                class="w-full px-3 py-2 bg-white border border-gray-200 rounded text-sm font-medium text-gray-800" 
                                readonly>
                     </div>
-
-                    <!-- Jam Selesai -->
                     <div>
                         <label class="block text-xs font-medium text-gray-600 mb-1">Jam Selesai</label>
                         <input type="text" id="jamSelesaiInput" 
@@ -83,8 +72,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Semester -->
             <div>
                 <label for="semester" class="block text-sm font-medium text-gray-700 mb-2">
                     Semester
@@ -93,8 +80,6 @@
                        class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" 
                        required>
             </div>
-
-            <!-- Submit Button -->
             <div class="pt-2">
                 <button type="submit" id="submitBtn"
                         class="w-full bg-[#14487a] hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition-colors duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed" 
@@ -113,26 +98,18 @@
         const submitBtn = document.getElementById('submitBtn');
         
         if (this.value) {
-            // Populate form fields
             document.getElementById('matkulInput').value = selected.getAttribute('data-matkul') || '';
             document.getElementById('sksInput').value = selected.getAttribute('data-sks') || '';
             document.getElementById('hariInput').value = selected.getAttribute('data-hari') || '';
             document.getElementById('jamMulaiInput').value = selected.getAttribute('data-jammulai') || '';
             document.getElementById('jamSelesaiInput').value = selected.getAttribute('data-jamselesai') || '';
-            
-            // Show detail section
+        
             detailSection.classList.remove('hidden');
-            
-            // Enable submit button
             submitBtn.disabled = false;
         } else {
-            // Hide detail section
             detailSection.classList.add('hidden');
-            
-            // Disable submit button
             submitBtn.disabled = true;
             
-            // Clear form fields
             document.getElementById('matkulInput').value = '';
             document.getElementById('sksInput').value = '';
             document.getElementById('hariInput').value = '';

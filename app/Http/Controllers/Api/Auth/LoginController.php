@@ -31,6 +31,7 @@ class LoginController extends Controller
         $role  = $request->input('role');
         $guard = 'web_' . $role; // Contoh: web_mahasiswa
 
+        
         // Ambil user dari tabel sesuai role
         if ($role === 'mahasiswa') {
             $user = Mahasiswa::where('nrp', $request->username)->first();

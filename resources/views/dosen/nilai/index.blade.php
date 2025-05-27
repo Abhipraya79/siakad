@@ -60,9 +60,9 @@
                             </a>
                         @else
                             @if($nilai->jadwalKuliah)
-                                <a href="{{ route('dosen.nilai.create', ['id_jadwal_kuliah' => $nilai->jadwalKuliah->id_jadwal_kuliah]) }}" class="text-green-600 hover:text-green-800">
-                                    Input Nilai
-                                </a>
+                        <a href="{{ route('dosen.nilai.create', ['id_frs' => $nilai->id_frs]) }}" class="text-green-600 hover:text-green-800">
+                            Input Nilai
+                         </a>
                             @else
                                 <span class="text-red-500">Data jadwal tidak tersedia</span>
                             @endif

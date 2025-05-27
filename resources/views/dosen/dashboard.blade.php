@@ -39,8 +39,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Total Mata Kuliah -->
         <div class="bg-white shadow-md rounded-lg p-6 border-l-4 border-green-500 hover:shadow-lg transition-shadow">
             <div class="flex items-center">
                 <div class="p-3 rounded-full bg-green-100 text-green-600 mr-4">
@@ -55,8 +53,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Motivational Message -->
     <div class="bg-blue-50 border border-blue-200 rounded-lg p-5 mb-8">
         <div class="flex items-start">
             <div class="bg-blue-100 rounded-full p-2 mr-3">
@@ -69,11 +65,8 @@
             </p>
         </div>
     </div>
-
-    <!-- Schedule Section -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        
-        <!-- Jadwal Per Hari -->
+    
         <div class="bg-white shadow-md rounded-lg p-6">
             <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
                 <svg class="w-5 h-5 mr-2 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
@@ -99,8 +92,6 @@
                 </div>
             @endif
         </div>
-
-        <!-- Jadwal Hari Ini -->
         <div class="bg-white shadow-md rounded-lg p-6">
             <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
                 <svg class="w-5 h-5 mr-2 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
