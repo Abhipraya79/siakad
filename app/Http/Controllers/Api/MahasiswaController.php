@@ -25,21 +25,21 @@ class MahasiswaController extends Controller
 
     // Detail mahasiswa berdasarkan ID
     public function show($id)
-    {
-        $mahasiswa = Mahasiswa::find($id);
+{
+    $mahasiswa = Mahasiswa::find($id);
 
-        if (!$mahasiswa) {
-            return response()->json([
-                "status" => "error",
-                "message" => "Mahasiswa tidak ditemukan"
-            ], 404);
-        }
-
+    if (!$mahasiswa) {
         return response()->json([
-            "status" => "success",
-            "data" => $mahasiswa
-        ]);
+            "status" => "error",
+            "message" => "Mahasiswa tidak ditemukan"
+        ], 404);
     }
+
+    return response()->json([
+        "status" => "success",
+        "data" => $mahasiswa
+    ]);
+}
 
     // Update data mahasiswa
     public function update(Request $request, $id)

@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Nilai;
-use App\Models\FRS;
-use App\Models\JadwalKuliah;
+use App\Models\Mahasiswa;
+use App\Models\Dosen;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,174 +13,157 @@ class NilaiController extends Controller
 {
     public function __construct()
     {
-        // butuh token Sanctum – guard mahasiswa | dosen
         $this->middleware('auth:sanctum');
     }
 
-    /* =========================================================
-       1.  LIST NILAI (index) – auto-filter berdasar role
-    ========================================================= */
     public function index()
     {
-        /* ----------- DOSEN ----------- */
-        if (Auth::guard('dosen')->check()) {
-            $dosen = Auth::guard('dosen')->user();
+        $user = Auth::user();
 
-            $nilaiList = FRS::whereHas('jadwalKuliah', function ($q) use ($dosen) {
-                    $q->where('id_dosen', $dosen->id_dosen);
-                })
-                ->where('status_acc', 'approved')
-                ->with(['mahasiswa', 'jadwalKuliah.mataKuliah', 'nilai'])
-                ->get();
-
-            return response()->json([
-                'status' => 'success',
-                'role'   => 'dosen',
-                'data'   => $nilaiList,
-            ]);
+        // ---------- MAHASISWA ----------
+        if ($user instanceof Mahasiswa || $user->role === 'mahasiswa') {
+            $nilai = $this->queryMahasiswa($user->id_mahasiswa)->get();
         }
-
-        /* ----------- MAHASISWA ----------- */
-        if (Auth::guard('mahasiswa')->check()) {
-            $mhs = Auth::guard('mahasiswa')->user();
-
-            $nilaiList = Nilai::whereHas('frs', fn ($q) => $q->where('id_mahasiswa', $mhs->id_mahasiswa))
-                ->with(['frs.jadwalKuliah.mataKuliah'])
-                ->get();
-
-            return response()->json([
-                'status' => 'success',
-                'role'   => 'mahasiswa',
-                'data'   => $nilaiList,
-            ]);
+        // ---------- DOSEN ----------
+        elseif ($user instanceof Dosen || $user->role === 'dosen') {
+            $nilai = $this->queryDosen($user->id_dosen)->get();
         }
-
-        /* ----------- UNAUTHORIZED ----------- */
-        return response()->json(['status' => 'error', 'message' => 'Unauthorized'], 401);
+        // ---------- ADMIN / LAINNYA ----------
+        else {
+            $nilai = $this->baseQuery()->get();
+        }
+    
+        return response()->json([
+            'status' => 'success',
+            'data'   => $nilai
+        ]);
     }
 
     /* =========================================================
-       2.  STORE – (dosen) input / update nilai mahasiswa
-           - hanya diizinkan untuk kelas yang diampunya
+       2.  TAMBAH NILAI  (biasanya dipakai dosen)
     ========================================================= */
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'id_frs'      => 'required|exists:frs,id_frs',
-            'nilai_angka' => 'required|numeric|min:0|max:100',
-            'nilai_huruf' => 'required|string|max:2',
+            'nilai_angka' => 'nullable|integer|min:0|max:100',
+            'nilai_huruf' => 'nullable|string|max:2',
         ]);
 
-        $dosen = Auth::guard('dosen')->user();
-        if (!$dosen) {
-            return response()->json(['status' => 'error', 'message' => 'Forbidden'], 403);
-        }
-
-        $frs = FRS::with('jadwalKuliah')->findOrFail($request->id_frs);
-        if ($frs->jadwalKuliah->id_dosen != $dosen->id_dosen) {
-            return response()->json(['status' => 'error', 'message' => 'Tidak berhak menilai FRS ini'], 403);
-        }
-
-        $nilai = Nilai::updateOrCreate(
-            ['id_frs' => $frs->id_frs],
-            [
-                'nilai_angka' => $request->nilai_angka,
-                'nilai_huruf' => strtoupper($request->nilai_huruf),
-            ]
-        )->load(['frs.mahasiswa', 'frs.jadwalKuliah.mataKuliah']);
+        $nilai = Nilai::create($validated);
 
         return response()->json([
             'status'  => 'success',
-            'message' => 'Nilai tersimpan',
-            'data'    => $nilai,
+            'message' => 'Nilai berhasil ditambahkan',
+            'data'    => $nilai->load(['frs.mahasiswa','frs.jadwalKuliah.mataKuliah'])
         ], 201);
     }
 
     /* =========================================================
-       3.  SHOW detail nilai (dosen atau mahasiswa)
+       3.  DETAIL NILAI
     ========================================================= */
     public function show($id)
     {
-        $nilai = Nilai::with(['frs.mahasiswa', 'frs.jadwalKuliah.mataKuliah'])->find($id);
+        $user  = Auth::user();
+        $nilai = $this->baseQuery()->find($id);
+
         if (!$nilai) {
-            return response()->json(['status' => 'error', 'message' => 'Data tidak ditemukan'], 404);
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Nilai tidak ditemukan'
+            ], 404);
         }
 
-        // hak akses: dosen pemilik kelas ATAU mahasiswa pemilik FRS
-        if ($this->forbidden($nilai)) {
-            return response()->json(['status' => 'error', 'message' => 'Forbidden'], 403);
+        // --- Authorization ---
+        if ($user instanceof Mahasiswa &&
+            $nilai->frs->id_mahasiswa !== $user->id_mahasiswa) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+        if ($user instanceof Dosen &&
+            $nilai->frs->jadwalKuliah->id_dosen !== $user->id_dosen) {
+            return response()->json(['message' => 'Forbidden'], 403);
         }
 
-        return response()->json(['status' => 'success', 'data' => $nilai]);
+        return response()->json([
+            'status' => 'success',
+            'data'   => $nilai
+        ]);
     }
 
     /* =========================================================
-       4.  UPDATE nilai
+       4.  UPDATE NILAI
     ========================================================= */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'nilai_angka' => 'required|numeric|min:0|max:100',
-        ]);
+        $nilai = Nilai::find($id);
 
-        $nilai = Nilai::with('frs.jadwalKuliah')->find($id);
         if (!$nilai) {
-            return response()->json(['status' => 'error', 'message' => 'Data tidak ditemukan'], 404);
-        }
-        if ($this->forbidden($nilai)) {
-            return response()->json(['status' => 'error', 'message' => 'Forbidden'], 403);
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Nilai tidak ditemukan'
+            ], 404);
         }
 
-        $nilai_huruf = $this->konversiNilai($request->nilai_angka);
-        $nilai->update([
-            'nilai_angka' => $request->nilai_angka,
-            'nilai_huruf' => $nilai_huruf,
+        $validated = $request->validate([
+            'nilai_angka' => 'sometimes|integer|min:0|max:100',
+            'nilai_huruf' => 'sometimes|string|max:2',
         ]);
 
-        return response()->json(['status' => 'success', 'message' => 'Nilai diupdate', 'data' => $nilai]);
+        $nilai->update($validated);
+
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'Nilai berhasil di-update',
+            'data'    => $nilai->load(['frs.mahasiswa','frs.jadwalKuliah.mataKuliah'])
+        ]);
     }
 
     /* =========================================================
-       5.  DESTROY nilai
+       5.  HAPUS NILAI
     ========================================================= */
     public function destroy($id)
     {
-        $nilai = Nilai::with('frs.jadwalKuliah')->find($id);
+        $nilai = Nilai::find($id);
+
         if (!$nilai) {
-            return response()->json(['status' => 'error', 'message' => 'Data tidak ditemukan'], 404);
-        }
-        if ($this->forbidden($nilai)) {
-            return response()->json(['status' => 'error', 'message' => 'Forbidden'], 403);
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Nilai tidak ditemukan'
+            ], 404);
         }
 
         $nilai->delete();
-        return response()->json(['status' => 'success', 'message' => 'Nilai dihapus']);
+
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'Nilai berhasil dihapus'
+        ]);
     }
 
     /* =========================================================
-       6.  Helper ACL & konversi nilai
+       Helper query scopes
     ========================================================= */
-    private function forbidden(Nilai $nilai): bool
+    private function baseQuery()
     {
-        // dosen hanya boleh akses nilai kelasnya
-        if (Auth::guard('dosen')->check()) {
-            return $nilai->frs->jadwalKuliah->id_dosen != Auth::guard('dosen')->id();
-        }
-        // mahasiswa hanya boleh akses nilai dirinya
-        if (Auth::guard('mahasiswa')->check()) {
-            return $nilai->frs->id_mahasiswa != Auth::guard('mahasiswa')->user()->id_mahasiswa;
-        }
-        return true;
+        return Nilai::with([
+            'frs.mahasiswa',
+            'frs.jadwalKuliah.mataKuliah'
+        ]);
     }
 
-    private function konversiNilai($angka): string
+    private function queryMahasiswa($idMahasiswa)
     {
-        return match (true) {
-            $angka >= 90 => 'A',
-            $angka >= 80 => 'B',
-            $angka >= 70 => 'C',
-            $angka >= 60 => 'D',
-            default      => 'E',
-        };
+        return $this->baseQuery()
+            ->whereHas('frs', function ($q) use ($idMahasiswa) {
+                $q->where('id_mahasiswa', $idMahasiswa);
+            });
+    }
+
+    private function queryDosen($idDosen)
+    {
+        return $this->baseQuery()
+            ->whereHas('frs.jadwalKuliah', function ($q) use ($idDosen) {
+                $q->where('id_dosen', $idDosen);
+            });
     }
 }

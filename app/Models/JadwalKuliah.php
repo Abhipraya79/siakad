@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class JadwalKuliah extends Model
 {
     protected $table = 'jadwal_kuliah';
+    protected $primaryKey  = 'id_jadwal_kuliah';
     public $incrementing = false;
     protected $keyType = 'int';
 

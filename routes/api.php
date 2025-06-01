@@ -30,16 +30,14 @@ Route::middleware('auth:sanctum')->group(function () {
 // ========== MAHASISWA ==========
 
 Route::middleware('auth:sanctum')->group(function () {
-    // Mahasiswa resource CRUD
     Route::get('/mahasiswa', [MahasiswaController::class, 'index']);
     Route::get('/mahasiswa/{id}', [MahasiswaController::class, 'show']);
     Route::put('/mahasiswa/{id}', [MahasiswaController::class, 'update']);
     Route::delete('/mahasiswa/{id}', [MahasiswaController::class, 'destroy']);
-    // (tambahkan route 'store' jika ingin tambah mahasiswa lewat API)
 });
 
+
 // ========== MATA KULIAH ==========
-Route::middleware('auth:sanctum')->get('/mahasiswa/nilai', [NilaiController::class, 'nilaiMahasiswa']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/mata-kuliah', [MataKuliahController::class, 'index']);
@@ -59,6 +57,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/frs/{id}', [FRSController::class, 'destroy']); // Batal FRS
 
     // Dosen FRS Approval
+    Route::get('/frs-approved', [FRSController::class, 'approvedFrs']);
+
     Route::get('/frs-approval', [FRSController::class, 'approvalIndex']); // FRS untuk approval dosen
     Route::post('/frs/{id}/approve', [FRSController::class, 'approve']); // Setujui FRS
     Route::post('/frs/{id}/reject', [FRSController::class, 'reject']); // Tolak FRS
