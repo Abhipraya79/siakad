@@ -39,6 +39,7 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 // ========== MATA KULIAH ==========
+Route::middleware('auth:sanctum')->get('/mahasiswa/nilai', [NilaiController::class, 'nilaiMahasiswa']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/mata-kuliah', [MataKuliahController::class, 'index']);

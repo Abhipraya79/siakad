@@ -5,7 +5,6 @@
     <h1 class="text-2xl font-bold mb-6">Jadwal Kuliah</h1>
 
     @php
-        // Kelompokkan berdasarkan hari dari relasi jadwalKuliah
         $grouped = $frsList->groupBy(function($frs) {
             return $frs->jadwalKuliah->hari ?? 'Tidak Diketahui';
         });

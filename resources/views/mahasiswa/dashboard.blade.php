@@ -5,7 +5,6 @@
 @section('content')
 <div class="p-6">
 
-    <!-- Header Section -->
     <div class="mb-8">
         <h2 class="text-2xl font-bold text-gray-800 mb-2">Dashboard Mahasiswa</h2>
         <p class="text-gray-600 flex items-center">
@@ -15,10 +14,7 @@
             Selamat datang, <strong>{{ $mahasiswa->nama }}</strong>
         </p>
     </div>
-
-    <!-- Stats Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <!-- Widget Jumlah SKS -->
         <div class="bg-white shadow-md rounded-lg p-6 border-l-4 border-blue-500 hover:shadow-lg transition-shadow">
             <div class="flex items-center">
                 <div class="p-3 rounded-full bg-blue-100 text-blue-600 mr-4">
@@ -32,8 +28,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Widget Jumlah Mata Kuliah -->
         <div class="bg-white shadow-md rounded-lg p-6 border-l-4 border-green-500 hover:shadow-lg transition-shadow">
             <div class="flex items-center">
                 <div class="p-3 rounded-full bg-green-100 text-green-600 mr-4">
@@ -47,8 +41,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Widget User Aktif -->
         <div class="bg-white shadow-md rounded-lg p-6 border-l-4 border-purple-500 hover:shadow-lg transition-shadow">
             <div class="flex items-center">
                 <div class="p-3 rounded-full bg-purple-100 text-purple-600 mr-4">

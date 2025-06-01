@@ -43,6 +43,16 @@
             @foreach($frsList as $frs)
                 <tr class="border-b hover:bg-blue-50">
                     <td class="py-3 px-4">{{ $frs->id_frs }}</td>
+                        @elseif($frs->status_acc === 'rejected')
+                            <span class="bg-red-100 text-red-700 px-2 py-1 rounded-full text-xs">Rejected</span>
+                        @else
+                            <span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full text-xs">Pending</span>
+                        @endif
+                    </td>
+                    <td class="py-3 px-4 text-sm">
+                        @if($frs->status_acc == 'pending')
+                            Menunggu persetujuan dosen wali
+                        @elseif($frs->status_acc == 'approved')
                     <td class="py-3 px-4">{{ $frs->jadwalKuliah->mataKuliah->kode_mata_kuliah ?? '-' }}</td>
                     <td class="py-3 px-4">{{ $frs->jadwalKuliah->mataKuliah->nama_mata_kuliah ?? '-' }}</td>
                     <td class="py-3 px-4">{{ $frs->jadwalKuliah->mataKuliah->sks ?? '-' }}</td>
@@ -54,16 +64,6 @@
                     <td class="py-3 px-4">
                         @if($frs->status_acc === 'approved')
                             <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs">Approved</span>
-                        @elseif($frs->status_acc === 'rejected')
-                            <span class="bg-red-100 text-red-700 px-2 py-1 rounded-full text-xs">Rejected</span>
-                        @else
-                            <span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full text-xs">Pending</span>
-                        @endif
-                    </td>
-                    <td class="py-3 px-4 text-sm">
-                        @if($frs->status_acc == 'pending')
-                            Menunggu persetujuan dosen wali
-                        @elseif($frs->status_acc == 'approved')
                             Telah disetujui
                         @elseif($frs->status_acc == 'rejected')
                             Ditolak oleh dosen wali

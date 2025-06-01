@@ -11,8 +11,6 @@
     @include('partials.header')
 
     @include('partials.sidebar-dosen')
-
-    <!-- Main Content -->
     <main class="p-4 md:ml-64">
        
         @if(session('success'))

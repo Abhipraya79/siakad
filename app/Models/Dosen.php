@@ -34,7 +34,6 @@ class Dosen extends Authenticatable
     {
         return $this->hasOne(User::class, 'id_reference', 'id_dosen');
     }
-    // Auto-hash password
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = bcrypt($value);
