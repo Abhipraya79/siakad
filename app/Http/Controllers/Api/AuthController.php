@@ -67,7 +67,7 @@ $identifier = $validated['identifier'] ?? $validated['username'];
             'role'  => $role,
             'token' => $token,
         ],
-    ]);
+    ]); 
 }
 
     /**

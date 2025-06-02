@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Pembayaran;
 use App\Models\FRS;
 use App\Models\JadwalKuliah;
 use App\Models\Mahasiswa;
@@ -20,29 +20,35 @@ class FRSController extends Controller
             ->with('jadwalKuliah.mataKuliah')
             ->orderBy('created_at', 'desc')
             ->get();
-        
         return view('mahasiswa.frs.index', compact('frsList'));
     }
 
     /**
      * Menampilkan form untuk membuat FRS baru
      */
-    public function create()
+public function create()
 {
     $mahasiswa = Auth::guard('mahasiswa')->user();
     if (!$mahasiswa) {
         return redirect()->back()->with('error', 'Anda tidak memiliki akses sebagai mahasiswa');
     }
 
+    // Cek pembayaran terakhir
+    $statusBayar = Pembayaran::where('id_mahasiswa', $mahasiswa->id_mahasiswa)
+        ->latest('tanggal_bayar')
+        ->first();
+
+    if (!$statusBayar || $statusBayar->status_pembayaran != 'Lunas') {
+        return redirect()->back()->with('error', 'Anda belum melakukan pembayaran UKT semester ini.');
+    }
+
     $frsTaken = $mahasiswa->frs()->pluck('id_jadwal_kuliah')->toArray();
-   
     $jadwalKuliah = JadwalKuliah::with('mataKuliah')
         ->whereNotIn('id_jadwal_kuliah', $frsTaken)
         ->get();
 
     return view('mahasiswa.frs.create', compact('jadwalKuliah'));
 }
-
 
         public function store(Request $request)
     {
@@ -55,22 +61,29 @@ class FRSController extends Controller
         if (!$mahasiswa) {
             return redirect()->back()->with('error', 'Anda tidak memiliki akses sebagai mahasiswa');
         }
+ $statusBayar = Pembayaran::where('id_mahasiswa', $mahasiswa->id_mahasiswa)
+        ->latest('tanggal_bayar')
+        ->first();
 
-        if (!$mahasiswa->dosenWali) {
-            return redirect()->back()->with('error', 'Anda belum memiliki dosen wali');
-        }
-
-        FRS::create([
-            'id_frs' => time(),
-            'id_mahasiswa' => $mahasiswa->id_mahasiswa,
-            'id_jadwal_kuliah' => $request->id_jadwal_kuliah,
-            'id_dosen_wali' => $mahasiswa->dosenWali->id_dosen,
-            'semester' => $request->semester,
-            'status_acc' => 'pending'
-        ]);
-
-        return redirect()->route('mahasiswa.frs.index')->with('success_create', 'FRS berhasil diajukan');
+    if (!$statusBayar || $statusBayar->status_pembayaran != 'Lunas') {
+        return redirect()->back()->with('error', 'FRS tidak bisa diajukan. Anda belum membayar UKT semester ini.');
     }
+
+    if (!$mahasiswa->dosenWali) {
+        return redirect()->back()->with('error', 'Anda belum memiliki dosen wali');
+    }
+
+    FRS::create([
+        'id_frs' => time(),
+        'id_mahasiswa' => $mahasiswa->id_mahasiswa,
+        'id_jadwal_kuliah' => $request->id_jadwal_kuliah,
+        'id_dosen_wali' => $mahasiswa->dosenWali->id_dosen,
+        'semester' => $request->semester,
+        'status_acc' => 'pending'
+    ]);
+
+    return redirect()->route('mahasiswa.frs.index')->with('success_create', 'FRS berhasil diajukan');
+}
 
     /**
      * Menghapus FRS
@@ -117,11 +130,11 @@ class FRSController extends Controller
         
         $nilaiExists = Nilai::where('id_frs', $frs->id_frs)->exists();
         if (!$nilaiExists) {
-            Nilai::create([
-    'id_frs' => $frs->id_frs,
-    'nilai_angka' => null,
-    'nilai_huruf' => null
-]);
+                    Nilai::create([
+            'id_frs' => $frs->id_frs,
+            'nilai_angka' => null,
+            'nilai_huruf' => null
+        ]);
         }
         
         return back()->with('success');
