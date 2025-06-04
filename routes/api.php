@@ -8,7 +8,7 @@ use App\Http\Controllers\Api\FRSController;
 use App\Http\Controllers\Api\NilaiController;
 use App\Http\Controllers\Api\JadwalKuliahController;
 use App\Http\Controllers\Api\MataKuliahController;
-
+use App\Http\Controllers\Api\PembayaranController;
 // ========== AUTH ==========
 
 Route::post('/login', [AuthController::class, 'login']);
@@ -84,3 +84,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/jadwal-kuliah/{id}', [JadwalKuliahController::class, 'destroy']);
 });
 
+// ========== PEMBAYARAN UKT ==========
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/status-ukt', [PembayaranController::class, 'cekStatusUkt']);
+    Route::post('/pembayaran', [PembayaranController::class, 'store']);
+    Route::get('/pembayaran', [PembayaranController::class, 'index']);
+    // Gunakan {id} = id_bayar
+    Route::patch('/pembayaran/{id_bayar}', [PembayaranController::class, 'updateStatus']);
+});
