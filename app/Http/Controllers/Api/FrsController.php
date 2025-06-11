@@ -9,6 +9,7 @@ use App\Models\Nilai;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use App\Models\Pembayaran;
 
 class FRSController extends Controller
 {
@@ -183,9 +184,7 @@ class FRSController extends Controller
         return response()->json(['status' => 'success', 'message' => 'FRS berhasil disetujui']);
     }
 
-    /* =========================================================
-     *  7.  DOSEN MENOLAK FRS
-     *  =======================================================*/
+
     public function reject(Request $request, $id)
     {
         $dosen = $request->user();
